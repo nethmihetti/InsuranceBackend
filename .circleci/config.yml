@@ -41,7 +41,7 @@ jobs:
       - deploy:
           name: Publish application to docker hub
           command: |
-            docker build . -t $DOCKER_USER/dockerapp:$CIRCLE_SHA1
+            docker build -f infrastructure/Dockerfile -t $DOCKER_USER/dockerapp:$CIRCLE_SHA1 .
             docker push $DOCKER_USER/dockerapp:$CIRCLE_SHA1
 
       # store raw contents of src code
