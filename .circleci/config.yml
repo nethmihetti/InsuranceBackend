@@ -41,7 +41,6 @@ jobs:
       - deploy:
           name: Publish application to docker hub
           command: |
-            docker login -e $DOCKER_HUB_EMAIL -u $DOCKER_HUB_USER_ID $DOCKER_HUB_PWD
             docker tag dockerapp_dockerapp $DOCKER_USER/dockerapp:$CIRCLE_SHA1
             docker push $DOCKER_USER/dockerapp:$CIRCLE_SHA1
 
