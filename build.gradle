@@ -24,9 +24,9 @@ repositories {
 	mavenCentral()
 }
 
-bootJar {
-	baseName = 'Insurance REST Server'
-	version =  '0.1.0'
+jar {
+	baseName = 'Insurance-REST-Server'
+	version =  '1.0.0'
 }
 
 dependencies {
@@ -54,13 +54,6 @@ dependencies {
 }
 
 compileKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ['-Xjsr305=strict']
-		jvmTarget = '1.8'
-	}
-}
-
-compileTestKotlin {
 	kotlinOptions {
 		freeCompilerArgs = ['-Xjsr305=strict']
 		jvmTarget = '1.8'

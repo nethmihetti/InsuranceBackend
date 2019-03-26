@@ -6,6 +6,12 @@ jobs:
 
     working_directory: ~/RESTserver
 
+    branches:
+      only:
+        - master
+        - develop
+        - baseproject #only for testing purpose. ToDo: remove this branch
+
     steps:
       # git pull
       - checkout
