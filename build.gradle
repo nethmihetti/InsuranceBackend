@@ -66,7 +66,3 @@ compileTestKotlin {
 		jvmTarget = '1.8'
 	}
 }
-
-jacoco {
-	toolVersion = "0.7.6+"
-}
