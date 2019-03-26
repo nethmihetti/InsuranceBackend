@@ -1,4 +1,12 @@
 FROM openjdk:8-jdk-alpine
 EXPOSE 8080
-ADD /build/libs/insuranceRESTServer-0.1.0.jar insuranceRESTServer.jar
-ENTRYPOINT ["java", "-jar", "insuranceRESTServer.jar"]
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY . /usr/src/app
+
+#RUN ls
+
+#COPY /build/libs/insuranceRESTServer-0.1.0.jar insuranceRESTServer.jar
+ENTRYPOINT ["java", "-jar", "/build/libs/insuranceRESTServer-0.1.0.jar"]
