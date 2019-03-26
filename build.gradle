@@ -12,6 +12,9 @@ project.ext {
 apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'org.springframework.boot'
 
 group = 'com.inno.soramitsu.insurance'
 version = '0.0.1-SNAPSHOT'
@@ -19,6 +22,11 @@ sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
+}
+
+bootJar {
+	baseName = 'Insurance REST Server'
+	version =  '0.1.0'
 }
 
 dependencies {
