@@ -1,4 +1,7 @@
 version: 2
+orbs:
+  aws-ecr: circleci/aws-ecr@0.0.2
+  aws-ecs: circleci/aws-ecs@0.0.3
 jobs:
   build:
     docker:
@@ -41,9 +44,69 @@ jobs:
       # package into a jar
       - run: gradle build
 
-      # build and push docker image to docker hub
-     # - run: mvn clean compile jib:build -Dimage=zarinlo/springboot-api:$CIRCLE_BUILD_NUM
+      - run:
+          name: Setup common environment variables
+          command: |
+            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
+            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:${CIRCLE_SHA1}"' >> $BASH_ENV
+      - run:
+          name: Build image
+          command: |
+            docker build --no-cache -f infrastructure/Dockerfile -t $FULL_IMAGE_NAME .
 
+      - run:
+          name: Save image to an archive
+          command: |
+            mkdir docker-image
+            docker save -o docker-image/image.tar $FULL_IMAGE_NAME
+      - persist_to_workspace:
+          root: .
+          paths:
+            - docker-image
+
+      deploy:
+        docker:
+          - image: circleci/python:3.6.1
+        environment:
+          AWS_DEFAULT_OUTPUT: json
+        steps:
+          - checkout
+          - setup_remote_docker
+          - attach_workspace:
+              at: workspace
+          - aws-cli/install
+          - aws-cli/configure:
+              aws-access-key-id: ${AWS_ACCESS_KEY_ID}
+              aws-region: ${AWS_DEFAULT_REGION}
+          - run:
+              name: Load image
+              command: |
+                docker load --input workspace/docker-image/image.tar
+          - run:
+              name: Setup common environment variables
+              command: |
+                echo 'export ECS_CLUSTER_NAME="${AWS_RESOURCE_NAME_PREFIX}-cluster"' >> $BASH_ENV
+                echo 'export ECS_SERVICE_NAME="${AWS_RESOURCE_NAME_PREFIX}-service"' >> $BASH_ENV
+                echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${AWS_RESOURCE_NAME_PREFIX}:${CIRCLE_SHA1}"' >> $BASH_ENV
+          - run:
+              name: Push image
+              command: |
+                eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+                docker push $FULL_IMAGE_NAME
+          - aws-ecs/update-service:
+              family: "${ECS_SERVICE_NAME}"
+              cluster-name: "${ECS_CLUSTER_NAME}"
+              container-image-name-updates: "container=${ECS_SERVICE_NAME},image-and-tag=${FULL_IMAGE_NAME}"
+              container-env-var-updates: "container=${ECS_SERVICE_NAME},name=VERSION_INFO,value=${CIRCLE_SHA1}_${CIRCLE_BUILD_NUM},container=${ECS_SERVICE_NAME},name=BUILD_DATE,value=\"$(date)\""
+              verify-revision-is-deployed: true
+      workflows:
+        build-deploy:
+          jobs:
+            - build
+            - deploy:
+                requires:
+                  - build
+#check fro here
       - deploy:
           name: Publish application to docker hub
           command: |
@@ -54,24 +117,3 @@ jobs:
       - store_artifacts:
           path: target/classes
           destination: RESTserver
-
-orbs:
-  aws-ecr: circleci/aws-ecr@0.0.2
-  aws-ecs: circleci/aws-ecs@0.0.3
-workflows:
-  version: 2
-  build-and-deploy:
-    jobs:
-      - aws-ecr/build_and_push_image:
-          account-url: ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
-          repo: ${AWS_RESOURCE_NAME_PREFIX}
-          region: ${AWS_DEFAULT_REGION}
-          tag: ${CIRCLE_SHA1}
-      - aws-ecs/deploy-service-update:
-          requires:
-            - aws-ecr/build_and_push_image
-          aws-region: ${AWS_DEFAULT_REGION}
-          family: taskDefinition1
-          cluster-name: Application-CDE-Aggregator-BE-ECS-Cluster-NonProd
-          container-image-name-updates: container=${AWS_RESOURCE_NAME_PREFIX}-service,tag=${CIRCLE_SHA1}
-
