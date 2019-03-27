@@ -18,7 +18,6 @@ jobs:
     steps:
       # git pull
       - checkout
-
       # setup testing env
       - setup_remote_docker:
           docker_layer_caching: true
@@ -63,7 +62,6 @@ jobs:
           root: .
           paths:
             - docker-image
-
       deploy:
         docker:
           - image: circleci/python:3.6.1
@@ -106,14 +104,3 @@ jobs:
             - deploy:
                 requires:
                   - build
-#check fro here
-      - deploy:
-          name: Publish application to docker hub
-          command: |
-            docker build --no-cache -f infrastructure/Dockerfile -t $DOCKER_USER/$DOCKER_REPO:$CIRCLE_SHA1 .
-            docker push $DOCKER_USER/$DOCKER_REPO:$CIRCLE_SHA1
-
-      # store raw contents of src code
-      - store_artifacts:
-          path: target/classes
-          destination: RESTserver
