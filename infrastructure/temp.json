@@ -1,5 +1,4 @@
 {
-    "taskDefinition": {
         "taskDefinitionArn": "arn:aws:ecs:us-east-2:473900713005:task-definition/Aggregator-backend:12",
         "containerDefinitions": [
             {
@@ -33,5 +32,4 @@
         "compatibilities": [
             "EC2"
         ]
-    }
 }
