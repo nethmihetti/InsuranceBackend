@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "Aggregator-backend-task-definition",
-      "image": "${FULL_IMAGE_NAME}",
+      "image": "473900713005.dkr.ecr.us-east-2.amazonaws.com/insurance-aggregator-soramitsu:16771437e548ff63a4118690f95a09bfa343cf17",
       "cpu": 10,
       "memory": 500,
       "portMappings": [
