@@ -1,0 +1,37 @@
+{
+    "taskDefinition": {
+        "taskDefinitionArn": "arn:aws:ecs:us-east-2:473900713005:task-definition/Aggregator-backend:12",
+        "containerDefinitions": [
+            {
+                "name": "Aggregator-backend-task-definition",
+                "image": "473900713005.dkr.ecr.us-east-2.amazonaws.com/insurance-aggregator-soramitsu:16771437e548ff63a4118690f95a09bfa343cf17",
+                "cpu": 10,
+                "memory": 500,
+                "portMappings": [
+                    {
+                        "containerPort": 8080,
+                        "hostPort": 8080,
+                        "protocol": "tcp"
+                    }
+                ],
+                "essential": true,
+                "environment": [],
+                "mountPoints": [],
+                "volumesFrom": []
+            }
+        ],
+        "family": "Aggregator-backend",
+        "revision": 12,
+        "volumes": [],
+        "status": "ACTIVE",
+        "requiresAttributes": [
+            {
+                "name": "com.amazonaws.ecs.capability.ecr-auth"
+            }
+        ],
+        "placementConstraints": [],
+        "compatibilities": [
+            "EC2"
+        ]
+    }
+}
