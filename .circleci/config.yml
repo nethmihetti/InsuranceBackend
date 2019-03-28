@@ -90,6 +90,12 @@ jobs:
             command: |
               eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
               docker push $FULL_IMAGE_NAME
+        - run:
+            name:
+            publish image
+            command: |
+              eval $(aws ecs register-task-definition --cli-input-json file:infrastructure/task-def.json)
+              eval $(aws ecs run-task --task-definition Aggregator-backend-task-definition)
         - aws-ecs/update-service:
             family: "${ECS_SERVICE_NAME}"
             cluster-name: "${ECS_CLUSTER_NAME}"

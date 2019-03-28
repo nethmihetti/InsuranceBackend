@@ -1,0 +1,23 @@
+{
+  "family": "Aggregator-backend",
+  "containerDefinitions": [
+    {
+      "name": "Aggregator-backend-task-definition",
+      "image": "${FULL_IMAGE_NAME}",
+      "cpu": 10,
+      "memory": 500,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080
+        }
+      ],
+      "entryPoint": [
+        "java",
+        "-jar",
+        "build/libs/RESTserver-0.0.1-SNAPSHOT.jar"
+      ],
+      "essential": true
+    }
+  ]
+}
