@@ -94,7 +94,7 @@ jobs:
             name: Publish image
             command: |
               eval $(aws ecs register-task-definition --cli-input-json file://infrastructure/task-def.json)
-              eval $(aws ecs run-task --cluster Agrregaotr-backend-non-prod --task-definition Aggregator-backend-task-definition:3 --count 1)
+              eval "aws ecs run-task --cluster Agrregaotr-backend-non-prod --task-definition Aggregator-backend-task-definition:3 --count 1"
 #              eval $(aws ecs run-task --cluster "$ECS_CLUSTER_NAME" --task-definition Aggregator-backend-task-definition:3 --count 1)
         - aws-ecs/update-service:
             family: "${ECS_SERVICE_NAME}"
