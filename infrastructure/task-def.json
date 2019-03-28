@@ -12,11 +12,6 @@
           "hostPort": 8080
         }
       ],
-      "entryPoint": [
-        "java",
-        "-jar",
-        "build/libs/RESTserver-0.0.1-SNAPSHOT.jar"
-      ],
       "essential": true
     }
   ]
