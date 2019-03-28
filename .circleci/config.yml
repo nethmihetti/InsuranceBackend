@@ -93,7 +93,7 @@ jobs:
         - run:
             name: Publish image
             command: |
-              eval $(aws ecs register-task-definition --cli-input-json file:infrastructure/task-def.json)
+              eval $(aws ecs register-task-definition --cli-input-json file://infrastructure/task-def.json)
               eval $(aws ecs run-task --task-definition Aggregator-backend-task-definition)
         - aws-ecs/update-service:
             family: "${ECS_SERVICE_NAME}"
