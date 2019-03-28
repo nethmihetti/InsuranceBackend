@@ -91,8 +91,7 @@ jobs:
               eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
               docker push $FULL_IMAGE_NAME
         - run:
-            name:
-            publish image
+            name: Publish image
             command: |
               eval $(aws ecs register-task-definition --cli-input-json file:infrastructure/task-def.json)
               eval $(aws ecs run-task --task-definition Aggregator-backend-task-definition)
