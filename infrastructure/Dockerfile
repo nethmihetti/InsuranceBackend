@@ -29,7 +29,7 @@ FROM gradle:4.2.1-jdk8-alpine
 WORKDIR /app
 COPY . /app
 
-ADD --chown=gradle:gradle /app /app
+ADD --chown=gradle:gradle . /app
 
 RUN ./gradlew build --stacktrace
 
