@@ -35,7 +35,7 @@ ADD --chown=gradle:gradle . /app
 
 RUN ls
 
-RUN ls build/libs
+#RUN ls build/libs
 
 #CMD java -jar build/libs/RESTserver-0.0.1-SNAPSHOT.jar
 CMD java -jar RESTserver-0.0.1-SNAPSHOT.jar
