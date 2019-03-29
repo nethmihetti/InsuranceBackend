@@ -28,11 +28,6 @@ jobs:
           name: build the project
           command: gradle build
 
-      - run:
-          name: Build image
-          command: |
-            docker build --no-cache -f infrastructure/Dockerfile -t $FULL_IMAGE_NAME .
-
   deploy_to_staging:
     docker:
       - image: google/cloud-sdk
