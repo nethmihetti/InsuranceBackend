@@ -1,10 +1,10 @@
 version: 2
-working_directory: ~/RESTserver
-
 jobs:
   build_and_test:
     docker:
       - image: circleci/openjdk:11.0.1-jdk
+
+    working_directory: ~/RESTserver
 
     steps:
       - checkout
@@ -23,18 +23,6 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # add the command to gradle test
-      # package into a jar
-      - run:
-          name: build the project
-          command: gradle build
-
-      - store_artifacts:
-          path: ./build/libs/RESTserver-0.0.1-SNAPSHOT.jar
-
-      - persist_to_workspace:
-          root: ./
-          paths:
-            - ./
 
   deploy_to_staging:
     docker:
@@ -45,8 +33,6 @@ jobs:
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
     steps:
-      - attach_workspace:
-          at: ./
       - checkout
       - run:
           name: Setup Google Cloud SDK
