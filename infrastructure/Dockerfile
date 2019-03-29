@@ -21,7 +21,7 @@ ADD --chown=gradle:gradle . /app
 
 #RUN ./gradlew build --stacktrace
 
-CMD gradle build --no-daemon --console plain
+RUN ./gradlew build --no-daemon --console plain
 
 RUN ls
 
