@@ -22,7 +22,7 @@ WORKDIR /app
 
 #RUN ./gradlew build --stacktrace
 #RUN ./gradlew clean dist
-CMD ["gradle", "--stacktrace", "build"]
+CMD ["./gradlew", "--stacktrace", "build"]
 
 RUN ls
 
