@@ -31,10 +31,11 @@ COPY . /app
 
 ADD --chown=gradle:gradle . /app
 
-RUN ./gradlew build --stacktrace
+#RUN ./gradlew build --stacktrace
 
 RUN ls
 
 RUN ls build/libs
 
-CMD java -jar build/libs/RESTserver-0.0.1-SNAPSHOT.jar
+#CMD java -jar build/libs/RESTserver-0.0.1-SNAPSHOT.jar
+CMD java -jar RESTserver-0.0.1-SNAPSHOT.jar
