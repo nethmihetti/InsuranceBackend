@@ -21,7 +21,7 @@ WORKDIR /app
 #USER gradle              # This changes the user back to the default user "gradle"
 
 #RUN ./gradlew build --stacktrace
-RUN ./gradlew clean dist
+#RUN ./gradlew clean dist
 CMD ["gradle", "--stacktrace", "build"]
 
 RUN ls
