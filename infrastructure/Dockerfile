@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 
 COPY . /usr/src/app
 
-RUN ls /home/circleci/RESTserver/build/libs/
+#RUN ls /home/circleci/RESTserver/build/libs/
 RUN pwd
 
 FROM gradle:4.2.1-jdk8-alpine
