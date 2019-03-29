@@ -20,9 +20,9 @@ WORKDIR /app
 #RUN chown -R gradle /app # This changes ownership of folder
 #USER gradle              # This changes the user back to the default user "gradle"
 
-#RUN ./gradlew build --stacktrace
+RUN gradle build --stacktrace
 #RUN ./gradlew clean dist
-CMD ["./gradlew", "--stacktrace", "build"]
+#CMD ["./gradlew", "--stacktrace", "build"]
 
 RUN ls
 
