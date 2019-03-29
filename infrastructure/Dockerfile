@@ -12,7 +12,7 @@ EXPOSE 8080
 
 
 WORKDIR /app
-COPY --from=0 . /app
+COPY . /app
 
 #USER root                # This changes default user to root
 ADD --chown=gradle:gradle . /app
