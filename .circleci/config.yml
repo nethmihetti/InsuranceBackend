@@ -93,14 +93,7 @@ jobs:
         - run:
             name: Publish image
             command: |
-              eval $(aws ecs register-task-definition --cli-input-json file://infrastructure/temp.json)
-              eval $(aws ecs run-task --cluster Agrregaotr-backend-non-prod --task-definition Aggregator-backend-task-definition:3 --count 1)
-        - aws-ecs/update-service:
-            family: "${ECS_SERVICE_NAME}"
-            cluster-name: "${ECS_CLUSTER_NAME}"
-            container-image-name-updates: "container=${ECS_SERVICE_NAME},image-and-tag=${FULL_IMAGE_NAME}"
-            container-env-var-updates: "container=${ECS_SERVICE_NAME},name=VERSION_INFO,value=${CIRCLE_SHA1}_${CIRCLE_BUILD_NUM},container=${ECS_SERVICE_NAME},name=BUILD_DATE,value=\"$(date)\""
-            verify-revision-is-deployed: true
+              find . -type f -name 'infrastructure/test.sh' | wc -l
 workflows:
   build-deploy:
     jobs:
@@ -108,3 +101,9 @@ workflows:
       - deploy:
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+                - baseproject
