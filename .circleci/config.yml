@@ -29,8 +29,7 @@ jobs:
           command: gradle build
 
       - store_artifacts:
-          path: /
-          destination: RESTserver-0.0.1-SNAPSHOT.jar
+          path: /RESTserver-0.0.1-SNAPSHOT.jar
 
   deploy_to_staging:
     docker:
