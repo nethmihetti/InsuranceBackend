@@ -1,10 +1,10 @@
 version: 2
+working_directory: ~/RESTserver
+
 jobs:
   build_and_test:
     docker:
       - image: circleci/openjdk:11.0.1-jdk
-
-    working_directory: ~/RESTserver
 
     steps:
       - checkout
@@ -46,7 +46,7 @@ jobs:
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
     steps:
       - attach_workspace:
-          at: ~/RESTserver
+          at: ./
       - checkout
       - run:
           name: Setup Google Cloud SDK
