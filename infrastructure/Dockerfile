@@ -1,5 +1,5 @@
-FROM gradle:4.3-jdk-alpine
-EXPOSE 8080
+####FROM gradle:4.3-jdk-alpine
+####EXPOSE 8080
 
 #RUN mkdir -p /usr/src/app
 #WORKDIR /usr/src/app
@@ -12,17 +12,28 @@ EXPOSE 8080
 
 
 
-COPY . /app
+####COPY . /app
 
 #USER root                # This changes default user to root
-ADD --chown=gradle . /app
-WORKDIR /app
+####ADD --chown=gradle . /app
+####WORKDIR /app
 #RUN chown -R gradle /app # This changes ownership of folder
 #USER gradle              # This changes the user back to the default user "gradle"
 
-RUN gradle build --stacktrace
+####RUN gradle build --stacktrace
 #RUN ./gradlew clean dist
 #CMD ["./gradlew", "--stacktrace", "build"]
+
+
+FROM gradle:4.2.1-jdk8-alpine
+WORKDIR /app
+COPY --from=0 . /app
+
+USER root                # This changes default user to root
+RUN chown -R gradle /app # This changes ownership of folder
+USER gradle              # This changes the user back to the default user "gradle"
+
+RUN ./gradlew build --stacktrace
 
 RUN ls
 
