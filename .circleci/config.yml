@@ -37,10 +37,10 @@ jobs:
         docker:
           - image: google/cloud-sdk
         environment:
-          - PROJECT_NAME: "my-app"
-          - GOOGLE_PROJECT_ID: "xxx"
-          - GOOGLE_COMPUTE_ZONE: "europe-west3-a"
-          - GOOGLE_CLUSTER_NAME: "cluster-1"
+          - PROJECT_NAME: "InsuranceAggregatorBackEnd"
+          - GOOGLE_PROJECT_ID: "insuranceaggregatorbackend"
+          - GOOGLE_COMPUTE_ZONE: "us-central1-b"
+          - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
         steps:
           - checkout
           - run:
@@ -67,7 +67,7 @@ jobs:
           - run:
               name: Deploy to Kubernetes
               command: |
-                envsubst < ${HOME}/project/k8s.yml > ${HOME}/patched_k8s.yml
+                envsubst < ${HOME}/RESTserver/.circleci/k8s.yml > ${HOME}/patched_k8s.yml
                 kubectl apply -f ${HOME}/patched_k8s.yml
                 kubectl rollout status deployment/${PROJECT_NAME}
 workflows:
