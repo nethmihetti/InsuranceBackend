@@ -9,7 +9,18 @@ COPY . /usr/src/app
 RUN ls /home/circleci/RESTserver/build/libs/
 RUN pwd
 
-#COPY /build/libs/insuranceRESTServer-0.1.0.jar insuranceRESTServer.jar
-#ENTRYPOINT ["java","-jar","/usr/src/app/build/libs/RESTserver-0.0.1-SNAPSHOT.jar"]
+FROM gradle:4.2.1-jdk8-alpine
 
-CMD java -jar /home/circleci/RESTserver/build/libs/RSTserver-0.0.1-SNAPSHOT.jar
+WORKDIR /app
+COPY --from=0 /app/myProject /app
+
+USER root                # This changes default user to root
+RUN chown -R gradle /app # This changes ownership of folder
+USER gradle              # This changes the user back to the default user "gradle"
+
+RUN ./gradlew build --stacktrace
+
+RUN ls
+RUN ls build/libs
+
+CMD java -jar build/libs/RSTserver-0.0.1-SNAPSHOT.jar
