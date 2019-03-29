@@ -6,7 +6,9 @@ WORKDIR /usr/src/app
 
 COPY . /usr/src/app
 
-RUN ls
+RUN ls /
+RUN ls /home
+RUN ls /home/build
 RUN pwd
 
 #COPY /build/libs/insuranceRESTServer-0.1.0.jar insuranceRESTServer.jar
