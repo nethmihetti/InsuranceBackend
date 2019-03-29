@@ -20,7 +20,7 @@ ADD --chown=gradle:gradle . /app
 #USER gradle              # This changes the user back to the default user "gradle"
 
 #RUN ./gradlew build --stacktrace
-
+RUN ./gradlew clean dist
 RUN ./gradlew build --no-daemon --console plain
 
 RUN ls
