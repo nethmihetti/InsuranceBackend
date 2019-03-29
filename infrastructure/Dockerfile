@@ -12,7 +12,7 @@ RUN pwd
 FROM gradle:4.2.1-jdk8-alpine
 
 WORKDIR /app
-COPY --from=0 /app/myProject /app
+COPY --from=0 /app /app
 
 USER root                # This changes default user to root
 RUN chown -R gradle /app # This changes ownership of folder
@@ -21,6 +21,6 @@ USER gradle              # This changes the user back to the default user "gradl
 RUN ./gradlew build --stacktrace
 
 RUN ls
-RUN ls build/libs
+#RUN ls build/libs
 
-CMD java -jar build/libs/RSTserver-0.0.1-SNAPSHOT.jar
+CMD java -jar /build/libs/RSTserver-0.0.1-SNAPSHOT.jar
