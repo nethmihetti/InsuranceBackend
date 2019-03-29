@@ -11,17 +11,18 @@ EXPOSE 8080
 
 
 
-WORKDIR /app
+
 COPY . /app
 
 #USER root                # This changes default user to root
-ADD --chown=gradle:gradle . /app
+ADD --chown=gradle . /app
+WORKDIR /app
 #RUN chown -R gradle /app # This changes ownership of folder
 #USER gradle              # This changes the user back to the default user "gradle"
 
 #RUN ./gradlew build --stacktrace
 RUN ./gradlew clean dist
-RUN ./gradlew build --no-daemon --console plain
+CMD ["gradle", "--stacktrace", "build"]
 
 RUN ls
 
