@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM gradle:4.3-jdk-alpine
 EXPOSE 8080
 
 #RUN mkdir -p /usr/src/app
@@ -9,7 +9,7 @@ EXPOSE 8080
 #RUN ls /home/circleci/RESTserver/build/libs/
 #RUN pwd
 
-FROM gradle:4.4.1-jdk9
+
 
 WORKDIR /app
 COPY --from=0 . /app
