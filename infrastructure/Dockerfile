@@ -9,7 +9,7 @@ EXPOSE 8080
 #RUN ls /home/circleci/RESTserver/build/libs/
 #RUN pwd
 
-FROM gradle:4.2.1-jdk8-alpine
+FROM gradle:4.4.1-jdk9
 
 WORKDIR /app
 COPY --from=0 . /app
@@ -19,7 +19,9 @@ ADD --chown=gradle:gradle . /app
 #RUN chown -R gradle /app # This changes ownership of folder
 #USER gradle              # This changes the user back to the default user "gradle"
 
-RUN ./gradlew build --stacktrace
+#RUN ./gradlew build --stacktrace
+
+CMD gradle build --no-daemon --console plain
 
 RUN ls
 
