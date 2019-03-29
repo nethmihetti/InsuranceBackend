@@ -28,6 +28,9 @@ jobs:
           name: build the project
           command: gradle build
 
+      - store_artifacts:
+          path: build/libs/RESTserver-0.0.1-SNAPSHOT.jar
+
   deploy_to_staging:
     docker:
       - image: google/cloud-sdk
