@@ -4,16 +4,9 @@ USER root
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 
-#RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-#USER appuser
-#COPY build.gradle settings.gradle gradlew $APP_HOME
-#COPY gradle $APP_HOME/gradle
-
 COPY . .
 
-#RUN chown -R admin:appuser $APP_HOME
 RUN chmod 755 $APP_HOME
-#USER admin
 
 RUN ./gradlew build --stacktrace
 

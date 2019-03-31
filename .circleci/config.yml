@@ -55,8 +55,6 @@ jobs:
       - run:
           name: Docker build and push
           command: |
-            docker run --rm gradle:alpine id -u
-            docker run --rm gradle:alpine id -g
             gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
             docker build \
               --no-cache -f infrastructure/Dockerfile \
