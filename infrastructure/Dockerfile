@@ -6,7 +6,7 @@ WORKDIR $APP_HOME
 #COPY gradle $APP_HOME/gradle
 
 COPY . .
-RUN ./gradlew build || return 0
+RUN ./gradlew build --stacktrace || return 0
 
 FROM gradle:4.3-jdk-alpine
 ENV ARTIFACT_NAME=RESTserver-0.0.1-SNAPSHOT.jar
