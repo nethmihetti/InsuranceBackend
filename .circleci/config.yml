@@ -57,13 +57,13 @@ jobs:
           command: |
             docker run --rm gradle:alpine id -u
             docker run --rm gradle:alpine id -g
+            gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
             docker build \
               --no-cache -f infrastructure/Dockerfile \
               --build-arg COMMIT_REF=${CIRCLE_SHA1} \
               --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
               -t ${GOOGLE_PROJECT_ID} .
             docker tag ${GOOGLE_PROJECT_ID} eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
-            gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
             docker push eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
       - run:
           name: Deploy to Kubernetes
