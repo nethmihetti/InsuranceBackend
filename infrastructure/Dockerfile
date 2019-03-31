@@ -1,41 +1,17 @@
-####FROM gradle:4.3-jdk-alpine
-####EXPOSE 8080
+FROM gradle:4.3-jdk-alpine AS TEMP_BUILD_IMAGE
+ENV APP_HOME=/usr/app/
+WORKDIR $APP_HOME
 
-#RUN mkdir -p /usr/src/app
-#WORKDIR /usr/src/app
+#COPY build.gradle settings.gradle gradlew $APP_HOME
+#COPY gradle $APP_HOME/gradle
 
-#COPY . /usr/src/app
+COPY . .
+RUN ./gradlew build || return 0
 
-#RUN ls /home/circleci/RESTserver/build/libs/
-#RUN pwd
-
-
-
-
-####COPY . /app
-
-#USER root                # This changes default user to root
-####ADD --chown=gradle . /app
-####WORKDIR /app
-#RUN chown -R gradle /app # This changes ownership of folder
-#USER gradle              # This changes the user back to the default user "gradle"
-
-####RUN gradle build --stacktrace
-#RUN ./gradlew clean dist
-#CMD ["./gradlew", "--stacktrace", "build"]
-
-
-FROM gradle:4.2.1-jdk8-alpine
-WORKDIR /app
-COPY . /app
-
-ADD --chown=gradle:gradle . /app
-
-#RUN ./gradlew build --stacktrace
-
-RUN ls
-
-#RUN ls build/libs
-
-#CMD java -jar build/libs/RESTserver-0.0.1-SNAPSHOT.jar
-CMD java -jar RESTserver-0.0.1-SNAPSHOT.jar
+FROM gradle:4.3-jdk-alpine
+ENV ARTIFACT_NAME=RESTserver-0.0.1-SNAPSHOT.jar
+ENV APP_HOME=/usr/app/
+WORKDIR $APP_HOME
+COPY --from=TEMP_BUILD_IMAGE $APP_HOME/build/libs/$ARTIFACT_NAME .
+EXPOSE 8080
+CMD ["java","-jar", "RESTserver-0.0.1-SNAPSHOT.jar"]
