@@ -57,6 +57,10 @@ jobs:
       - setup_remote_docker
       - run:
           name: Docker build and push
+          environment:
+            DATASOURCE_URL: "jdbc:postgresql://soramitsuipbackend.ccoyhnadmdam.us-east-2.rds.amazonaws.com:5432/insuranceAggregator?currentSchema=main"
+            DATASOURCE_USERNAME: "insuranceAdmin"
+            DATASOURCE_PASSWORD: "soramitsu1234"
           command: |
             gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
             docker build \
