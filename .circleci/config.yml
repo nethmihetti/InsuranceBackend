@@ -25,7 +25,7 @@ jobs:
       # add the command to gradle test
       - run:
           name: run the test suites
-          command: gradle test
+          command: gradle clean build jacocoTestReport
       # package into a jar
       - run:
           name: build the project
