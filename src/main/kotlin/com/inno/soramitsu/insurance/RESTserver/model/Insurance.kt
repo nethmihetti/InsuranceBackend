@@ -1,6 +1,6 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
-import java.util.*
+import java.time.LocalDate
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 
@@ -26,5 +26,5 @@ data class Insurance (
 
         @get: NotBlank
         @Column(name = "date_prod")
-        var date_prod: Date
+        var date_prod: LocalDate
 )
