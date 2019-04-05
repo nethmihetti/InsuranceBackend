@@ -85,7 +85,7 @@ jobs:
       - GOOGLE_PROJECT_ID: "insuranceaggregatorbackend"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
-      - DATASOURCE_URL: ${DATASOURCE_URL}
+      - DATASOURCE_URL: $DATASOURCE_URL
       - DATASOURCE_USERNAME: "insuranceAdmin"
       - DATASOURCE_PASSWORD: "soramitsu1234"
     steps:
@@ -109,7 +109,7 @@ jobs:
               --no-cache -f infrastructure/Dockerfile \
               --build-arg COMMIT_REF=${CIRCLE_SHA1} \
               --build-arg BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”` \
-              --build-arg DATASOURCE_URL=${DATASOURCE_URL} \
+              --build-arg DATASOURCE_URL=$DATASOURCE_URL \
               -t ${GOOGLE_PROJECT_ID} .
             docker tag ${GOOGLE_PROJECT_ID} eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
             docker push eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
