@@ -78,6 +78,8 @@ jobs:
             kubectl rollout status deployment/${GOOGLE_PROJECT_ID}
 
   deploy_to_stag:
+    docker:
+      - image: google/cloud-sdk
     steps:
       - checkout
       - run:
