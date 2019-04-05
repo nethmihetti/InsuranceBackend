@@ -98,7 +98,7 @@ jobs:
 
 workflows:
   version: 2
-  build_test_deploy_dev:
+  build_test_deploy:
     jobs:
       - build_and_test
       - deploy_to_dev:
@@ -108,14 +108,10 @@ workflows:
             branches:
               only:
               - develop
-              - staging
-              - master
               - googlekubernates # for testing only toDo: remove it
-  deploy_stag:
-    jobs:
       - deploy_to_stag:
           requires:
-            - build_test_deploy_dev
+            - deploy_to_dev
           filters:
             branches:
               only:
