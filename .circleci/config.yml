@@ -134,7 +134,7 @@ workflows:
               #- googlekubernates # for testing only toDo: remove it
       - deploy_to_stag:
           requires:
-            - deploy_to_dev
+            - build_and_test
           filters:
             branches:
               only:
