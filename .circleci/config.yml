@@ -43,6 +43,9 @@ jobs:
       - GOOGLE_PROJECT_ID: "insuranceaggregatorbackend"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
+      - DATASOURCE_URL: "jdbc:postgresql://soramitsuipbackend.ccoyhnadmdam.us-east-2.rds.amazonaws.com:5432/insuranceAggregator?currentSchema=main"
+      - DATASOURCE_USERNAME: "insuranceAdmin"
+      - DATASOURCE_PASSWORD: "soramitsu1234"
     steps:
       - checkout
       - run:
@@ -57,11 +60,8 @@ jobs:
       - setup_remote_docker
       - run:
           name: Docker build and push
-          environment:
-            DATASOURCE_URL: "jdbc:postgresql://soramitsuipbackend.ccoyhnadmdam.us-east-2.rds.amazonaws.com:5432/insuranceAggregator?currentSchema=main"
-            DATASOURCE_USERNAME: "insuranceAdmin"
-            DATASOURCE_PASSWORD: "soramitsu1234"
           command: |
+            echo $DATASOURCE_URL
             gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
             docker build \
               --no-cache -f infrastructure/Dockerfile \
@@ -73,8 +73,27 @@ jobs:
       - run:
           name: Deploy to Kubernetes
           command: |
-            envsubst < k8s.yml > ${HOME}/patched_k8s.yml
+            envsubst < infrastructure/k8s.yml > ${HOME}/patched_k8s.yml
             kubectl apply -f ${HOME}/patched_k8s.yml
+            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}
+
+  deploy_to_stag:
+    steps:
+      - checkout
+      - run:
+          name: Setup Google Cloud SDK
+          command: |
+            apt-get install -qq -y gettext
+            echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+            gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+            gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+            gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+            gcloud --quiet container clusters get-credentials ${GOOGLE_CLUSTER_NAME}
+      - run:
+          name: Deploy to Kubernetes
+          command: |
+            envsubst < infrastructure/k8s_stag.yml > ${HOME}/patched_k8s_stag.yml
+            kubectl apply -f ${HOME}/patched_k8s_stag.yml
             kubectl rollout status deployment/${GOOGLE_PROJECT_ID}
 
 workflows:
@@ -88,7 +107,18 @@ workflows:
           filters:
             branches:
               only:
-              - master
               - develop
-              - googlekubernates
+              - staging
+              - master
+              - googlekubernates # for testing only toDo: remove it
+  deploy_stag:
+    jobs:
+      - deploy_to_stag:
+          requires:
+            - build_test_deploy_dev
+          filters:
+            branches:
+              only:
+                - staging
+                - googlekubernates # for testing only toDo: remove it
 
