@@ -1,10 +1,10 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: ${GOOGLE_PROJECT_ID}
+  name: ${GOOGLE_PROJECT_ID}-stag
 spec:
   selector:
-    app: ${GOOGLE_PROJECT_ID}
+    app: ${GOOGLE_PROJECT_ID}-stag
   ports:
     - protocol: TCP
       port: 8080
@@ -14,21 +14,21 @@ spec:
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: ${GOOGLE_PROJECT_ID}
+  name: ${GOOGLE_PROJECT_ID}-stag
   labels:
-    app: ${GOOGLE_PROJECT_ID}
+    app: ${GOOGLE_PROJECT_ID}-stag
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: ${GOOGLE_PROJECT_ID}
+      app: ${GOOGLE_PROJECT_ID}-stag
   template:
     metadata:
       labels:
-        app: ${GOOGLE_PROJECT_ID}
+        app: ${GOOGLE_PROJECT_ID}-stag
     spec:
       containers:
-        - name: ${GOOGLE_PROJECT_ID}
+        - name: ${GOOGLE_PROJECT_ID}-stag
           image: eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
           ports:
             - name: http
