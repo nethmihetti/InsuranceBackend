@@ -85,7 +85,7 @@ jobs:
       - GOOGLE_PROJECT_ID: "insuranceaggregatorbackend"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
-      - DATASOURCE_URL: $DATASOURCE_URL
+      #- DATASOURCE_URL: ${DATASOURCE_URL}
       - DATASOURCE_USERNAME: "insuranceAdmin"
       - DATASOURCE_PASSWORD: "soramitsu1234"
     steps:
@@ -132,7 +132,7 @@ workflows:
             branches:
               only:
               - develop
-              - googlekubernates # for testing only toDo: remove it
+              #- googlekubernates # for testing only toDo: remove it
       - deploy_to_stag:
           requires:
             - build_and_test
