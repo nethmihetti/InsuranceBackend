@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RestController
  * Created by nethmih on 17.03.19.
  */
 
-
-//remove this comment
-
 @RestController
 @RequestMapping("/insurance")
 class Controller {
