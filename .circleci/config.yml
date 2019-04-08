@@ -110,7 +110,7 @@ jobs:
           command: |
             envsubst < infrastructure/k8s_stag.yml > ${HOME}/patched_k8s_stag.yml
             kubectl apply -f ${HOME}/patched_k8s_stag.yml
-            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}-stag
+            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}
 
 workflows:
   version: 2
@@ -132,5 +132,5 @@ workflows:
             branches:
               only:
                 - staging
-                #- googlekubernates # for testing only toDo: remove it
+                - googlekubernates # for testing only toDo: remove it
 

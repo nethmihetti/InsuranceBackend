@@ -30,6 +30,11 @@ spec:
       containers:
         - name: ${GOOGLE_PROJECT_ID}-stag
           image: eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
+          env:
+            - name: DEMO_GREETING
+              value: "Hello from the environment"
+            - name: DEMO_FAREWELL
+              value: "Such a sweet sorrow"
           ports:
             - name: http
               containerPort: 8080
