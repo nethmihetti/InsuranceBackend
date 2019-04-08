@@ -43,9 +43,6 @@ jobs:
       - GOOGLE_PROJECT_ID: "insuranceaggregatorbackend"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
-      - DATASOURCE_URL: "jdbc:postgresql://soramitsuipbackend.ccoyhnadmdam.us-east-2.rds.amazonaws.com:5432/insuranceAggregator?currentSchema=main"
-      - DATASOURCE_USERNAME: "insuranceAdmin"
-      - DATASOURCE_PASSWORD: "soramitsu1234"
     steps:
       - checkout
       - run:
@@ -74,7 +71,7 @@ jobs:
           command: |
             envsubst < infrastructure/k8s_dev.yml > ${HOME}/patched_k8s_dev.yml
             kubectl apply -f ${HOME}/patched_k8s_dev.yml
-            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}-dev
+            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}
 
   deploy_to_stag:
     docker:
@@ -84,9 +81,6 @@ jobs:
       - GOOGLE_PROJECT_ID: "insuranceaggregatorbackend"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
-      #- DATASOURCE_URL: ${DATASOURCE_URL}
-      - DATASOURCE_USERNAME: "insuranceAdmin"
-      - DATASOURCE_PASSWORD: "soramitsu1234"
     steps:
       - checkout
       - run:
