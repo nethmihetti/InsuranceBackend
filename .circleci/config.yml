@@ -101,7 +101,6 @@ jobs:
             docker build \
               --no-cache -f infrastructure/Dockerfile \
               --build-arg COMMIT_REF=${CIRCLE_SHA1} \
-              --build-arg DATASOURCE_URL=$DATASOURCE_URL \
               -t ${GOOGLE_PROJECT_ID} .
             docker tag ${GOOGLE_PROJECT_ID} eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
             docker push eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
@@ -124,7 +123,6 @@ workflows:
             branches:
               only:
               - develop
-              - googlekubernates # for testing only toDo: remove it
       - deploy_to_stag:
           requires:
             - build_and_test
@@ -132,5 +130,4 @@ workflows:
             branches:
               only:
                 - staging
-                - googlekubernates # for testing only toDo: remove it
 
