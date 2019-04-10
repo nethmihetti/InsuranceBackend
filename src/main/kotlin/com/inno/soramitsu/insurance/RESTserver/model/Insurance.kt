@@ -10,21 +10,35 @@ import javax.validation.constraints.NotBlank
 
 
 @Entity
-@Table(name = "insuranceboxproducts")
+@Table(name = "insuranceRequest")
 data class Insurance (
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "id")
-        var id: Long = 0,
+        @Column(name = "insuranceRequestId")
+        var insuranceRequestId: Long = 0,
+
+     /*   @OneToOne(mappedBy = "insuranceRequest")
+        val userId: User,
+
+        @OneToOne(mappedBy = "insuranceRequest")
+        val addressId: UserAddress,*/
 
         @get: NotBlank
-        @Column(name = "title")
-        var title: String = "",
+        @Column(name = "propertyType")
+        var propertyType: String = "",
 
         @get: NotBlank
-        @Column(name = "content")
-        var content: String = "",
+        @Column(name = "amount")
+        var amount: Double = 0.00,
 
         @get: NotBlank
-        @Column(name = "date_prod")
-        var date_prod: LocalDate
+        @Column(name = "policyStartDate")
+        var policyStartDate: LocalDate,
+
+        @get: NotBlank
+        @Column(name = "policyEndDate")
+        var policyEndDate: LocalDate,
+
+        @get: NotBlank
+        @Column(name = "policyCreatedDate")
+        var policyCreatedDate: LocalDate
 )
