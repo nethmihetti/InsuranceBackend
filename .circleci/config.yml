@@ -123,7 +123,6 @@ workflows:
             branches:
               only:
               - develop
-              - googlekubernates # for testing only toDo: remove it
       - deploy_to_stag:
           requires:
             - build_and_test
@@ -131,5 +130,4 @@ workflows:
             branches:
               only:
                 - staging
-                - googlekubernates # for testing only toDo: remove it
 
