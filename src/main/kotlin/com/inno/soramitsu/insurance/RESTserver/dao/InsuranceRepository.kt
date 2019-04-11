@@ -1,6 +1,7 @@
 package com.inno.soramitsu.insurance.RESTserver.dao
 
 import com.inno.soramitsu.insurance.RESTserver.model.Insurance
+import com.inno.soramitsu.insurance.RESTserver.model.InsuranceRequestBody
 import com.inno.soramitsu.insurance.RESTserver.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -16,6 +17,12 @@ import javax.transaction.Transactional
 @Repository
 interface InsuranceRepository : JpaRepository<Insurance, Long> {
 
+    @Modifying
+    @Query(value = "insert into insurancerequest(userid, propertytype, amount, policystartdate, policyenddate, policycreatedcate, status)" +
+            "VALUES(:#{#userId}, :#{#newRequest.propertyType}, :#{#newRequest.amount}, :#{#newRequest.policyStartDate}, :#{#newRequest.policyEndDate}, :#{#newRequest.policyCreatedDate}, :#{#newRequest.status})",
+            nativeQuery = true)
 
+    @Transactional
+    fun insertNewInsuranceRequest(@Param("newRequest") newRequest: InsuranceRequestBody, @Param("userId") userId: Long)
 
 }

@@ -16,29 +16,33 @@ data class Insurance (
         @Column(name = "insuranceRequestId")
         var insuranceRequestId: Long = 0,
 
-     /*   @OneToOne(mappedBy = "insuranceRequest")
+        @OneToOne
         val userId: User,
 
-        @OneToOne(mappedBy = "insuranceRequest")
-        val addressId: UserAddress,*/
+        /*  @OneToOne(mappedBy = "insuranceRequest")
+          val addressId: UserAddress,*/
 
         @get: NotBlank
-        @Column(name = "propertyType")
-        var propertyType: String = "",
+        @Column(name = "propertytype")
+        var propertytype: String = "",
 
         @get: NotBlank
         @Column(name = "amount")
         var amount: Double = 0.00,
 
         @get: NotBlank
-        @Column(name = "policyStartDate")
-        var policyStartDate: LocalDate,
+        @Column(name = "policystartdate")
+        var policystartdate: LocalDate,
 
         @get: NotBlank
-        @Column(name = "policyEndDate")
-        var policyEndDate: LocalDate,
+        @Column(name = "policyenddate")
+        var policyenddate: LocalDate,
 
         @get: NotBlank
-        @Column(name = "policyCreatedDate")
-        var policyCreatedDate: LocalDate
+        @Column(name = "policycreatedcate")
+        var policycreatedcate: LocalDate,
+
+        @get: NotBlank
+        @Column(name = "status")
+        var status: String=""
 )

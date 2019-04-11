@@ -1,9 +1,7 @@
 package com.inno.soramitsu.insurance.RESTserver.dao
 
-import com.inno.soramitsu.insurance.RESTserver.controller.AddressBody
-import com.inno.soramitsu.insurance.RESTserver.controller.UserBodyNew
 import com.inno.soramitsu.insurance.RESTserver.model.User
-import com.inno.soramitsu.insurance.RESTserver.model.UserAddress
+import com.inno.soramitsu.insurance.RESTserver.model.UserBody
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -23,7 +21,10 @@ interface UserRepository : JpaRepository<User, Long> {
             nativeQuery = true)
 
     @Transactional
-    fun postNewUser(@Param("newUser") newUser: UserBodyNew, @Param("addressId") addressId: Long)
+    fun postNewUser(@Param("newUser") newUser: UserBody, @Param("addressId") addressId: Long)
+
+    @Transactional
+    fun findByUsername(@Param("username") username: String): User
 }
 
 

@@ -10,17 +10,18 @@ import javax.validation.constraints.NotBlank
 @Entity
 @Table(name = "address")
 data class UserAddress (
+
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "addressId")
-        var addressId: Long = 0,
+        @Column(name = "addressid")
+        var addressid: Long = 0,
 
         @get: NotBlank
-        @Column(name = "houseNum")
-        var houseNum: String = "",
+        @Column(name = "housenum")
+        var housenum: String = "",
 
         @get: NotBlank
-        @Column(name = "apartmentNum")
-        var apartmentNum: String = "",
+        @Column(name = "apartmentnum")
+        var apartmentnum: String = "",
 
         @get: NotBlank
         @Column(name = "street")

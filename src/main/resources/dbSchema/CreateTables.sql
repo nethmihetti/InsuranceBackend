@@ -20,18 +20,21 @@ CREATE TABLE main.userData(
  mobileNum VARCHAR (20) UNIQUE NOT NULL,
  passportNum VARCHAR (20) UNIQUE NOT NULL,
  passportIssuedBy VARCHAR (150)  NOT NULL,
- passportIssuedDate TIMESTAMP  NOT NULL,
+ passportIssuedDate DATE NOT NULL DEFAULT CURRENT_DATE,
  addressId serial NOT NULL REFERENCES main.address(addressId)
 );
+
+create type insurance_status as enum('pending', 'accepted', 'rejected');
 
 CREATE TABLE main.insuranceRequest (
   insuranceRequestId serial PRIMARY KEY,
   userId serial NOT NULL REFERENCES main.userData(userId),
   propertyType VARCHAR (50)  NOT NULL,
   amount NUMERIC  NOT NULL,
-  policyStartDate TIMESTAMP  NOT NULL,
-  policyEndDate TIMESTAMP  NOT NULL,
-  policyCreatedDate TIMESTAMP  NOT NULL
+  policyStartDate DATE NOT NULL DEFAULT CURRENT_DATE,
+  policyEndDate DATE NOT NULL DEFAULT CURRENT_DATE,
+  policyCreatedDate DATE NOT NULL DEFAULT CURRENT_DATE,
+  status insurance_status NOT NULL DEFAULT 'pending'
 );
 
 INSERT INTO main.address(houseNum, apartmentNum, street, city, state, country)

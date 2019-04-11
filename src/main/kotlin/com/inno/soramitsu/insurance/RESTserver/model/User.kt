@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank
 @Table(name = "userData")
 data class User (
         @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "userId")
+        @Column(name = "userid")
         var userId: Long = 0,
 
         @get: NotBlank
@@ -20,15 +20,15 @@ data class User (
         var username: String = "",
 
         @get: NotBlank
-        @Column(name = "firstName")
+        @Column(name = "firstname")
         var firstName: String = "",
 
         @get: NotBlank
-        @Column(name = "middleName")
+        @Column(name = "middlename")
         var middleName: String = "",
 
         @get: NotBlank
-        @Column(name = "lastName")
+        @Column(name = "lastname")
         var lastName: String = "",
 
         @get: NotBlank
@@ -40,19 +40,19 @@ data class User (
         var email: String = "",
 
         @get: NotBlank
-        @Column(name = "mobileNum")
+        @Column(name = "mobilenum")
         var mobileNum: String = "",
 
         @get: NotBlank
-        @Column(name = "passportNum")
+        @Column(name = "passportnum")
         var passportNum: String = "",
 
         @get: NotBlank
-        @Column(name = "passportIssuedBy")
+        @Column(name = "passportissuedby")
         var passportIssuedBy: String = "",
 
         @get: NotBlank
-        @Column(name = "passportIssuedDate")
+        @Column(name = "passportissueddate")
         var passportIssuedDate: LocalDate,
 
         @OneToOne

@@ -1,19 +1,13 @@
 package com.inno.soramitsu.insurance.RESTserver.service.impl
 
-import com.inno.soramitsu.insurance.RESTserver.controller.AddressBody
-import com.inno.soramitsu.insurance.RESTserver.controller.UserBodyNew
 import com.inno.soramitsu.insurance.RESTserver.dao.AddressRepository
 import com.inno.soramitsu.insurance.RESTserver.dao.InsuranceRepository
 import com.inno.soramitsu.insurance.RESTserver.dao.UserRepository
-import com.inno.soramitsu.insurance.RESTserver.model.Insurance
-import com.inno.soramitsu.insurance.RESTserver.model.User
-import com.inno.soramitsu.insurance.RESTserver.model.UserAddress
-import com.inno.soramitsu.insurance.RESTserver.model.UserBody
+import com.inno.soramitsu.insurance.RESTserver.model.*
 import com.inno.soramitsu.insurance.RESTserver.service.InsuranceService
-import org.apache.tomcat.jni.Address
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 
 /**
  * Created by nethmih on 17.03.19.
@@ -36,18 +30,40 @@ class InsuranceServiceImpl : InsuranceService {
         return insuranceRepository.findAll()
     }
 
-    override fun postNewUser(newUser: UserBodyNew) {
+    override fun postNewUser(newUser: UserBody) {
 
-      //  var address: UserAddress = newUser.address
-     //   var user = User(newUser.email)
-        System.out.println(newUser.passportIssuedDate)
-        userRepository.postNewUser(newUser, 2)
+        //inserting the address to the db
+        postNewAddress(newUser.address)
 
+        val lastAddress = addressRepository.findTopByOrderByAddressidDesc().addressid
+
+        if(lastAddress > 0) {
+            userRepository.postNewUser(newUser,lastAddress)
+        }
 
     }
 
     override fun postNewAddress(newAddress: AddressBody) {
         addressRepository.postNewAddress(newAddress)
+    }
+
+    override fun insertNewInsuranceRequest(insuranceRequestBody: InsuranceRequestBody) {
+        //get the userID
+        System.out.println("here" + insuranceRequestBody.username )
+
+        //val user = userRepository.findByUsername(insuranceRequestBody.username)
+        val user = userRepository.findByUsername("'nethmih'")
+
+        System.out.println(user.userId)
+
+        if(user.userId > 0) {
+            //insert the request
+            insuranceRepository.insertNewInsuranceRequest(insuranceRequestBody, user.userId)
+        } else {
+            System.out.println("user not found")
+        }
+
+
     }
 
 }
