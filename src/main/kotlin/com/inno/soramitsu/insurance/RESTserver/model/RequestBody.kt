@@ -26,8 +26,7 @@ class UserBody (
         var mobileNum: String = "",
         var passportNum: String = "",
         var passportIssuedBy: String = "",
-        var passportIssuedDate: Date,
-        var address: AddressBody
+        var passportIssuedDate: Date
 
 )
 
@@ -45,5 +44,12 @@ class InsuranceRequestBody (
     var policyStartDate: Date,
     var policyEndDate: Date,
     var policyCreatedDate: Date,
-    var status: InsuranceStatusType=InsuranceStatusType.PENDING
+    var address: AddressBody,
+    var status: String=InsuranceStatusType.PENDING.type,
+    var companyId: Long=1
+)
+
+class CompanyRequestBody(
+    var CompanyName: String ="",
+    var address: AddressBody
 )

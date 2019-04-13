@@ -1,46 +1,55 @@
 CREATE TABLE main.address(
- addressId serial PRIMARY KEY,
- houseNum VARCHAR (50)  NOT NULL,
- apartmentNum VARCHAR (50) NULL,
+ address_id bigserial PRIMARY KEY,
+ house_num VARCHAR (50)  NOT NULL,
+ apartment_num VARCHAR (50) NULL,
  street VARCHAR (100)  NOT NULL,
  city VARCHAR (100)  NOT NULL,
  state VARCHAR (100)  NOT NULL,
  country VARCHAR (50)  NOT NULL,
- UNIQUE (houseNum, apartmentNum, street, city, state, country)
+ UNIQUE (house_num, apartment_num, street, city, state, country)
 );
 
-CREATE TABLE main.userData(
- userId serial PRIMARY KEY,
+CREATE TABLE main.user_data(
+ user_id bigserial PRIMARY KEY,
  username VARCHAR (50) UNIQUE NOT NULL,
- firstName VARCHAR (50)  NOT NULL,
- middleName VARCHAR (50)  NOT NULL,
- lastName VARCHAR (50)  NOT NULL,
+ first_name VARCHAR (50)  NOT NULL,
+ middle_name VARCHAR (50)  NOT NULL,
+ last_name VARCHAR (50)  NOT NULL,
  password VARCHAR (200) NOT NULL,
  email VARCHAR (320) UNIQUE NOT NULL,
- mobileNum VARCHAR (20) UNIQUE NOT NULL,
- passportNum VARCHAR (20) UNIQUE NOT NULL,
- passportIssuedBy VARCHAR (150)  NOT NULL,
- passportIssuedDate DATE NOT NULL DEFAULT CURRENT_DATE,
- addressId serial NOT NULL REFERENCES main.address(addressId)
+ mobile_num VARCHAR (20) UNIQUE NOT NULL,
+ passport_num VARCHAR (20) UNIQUE NOT NULL,
+ passport_issued_by VARCHAR (150)  NOT NULL,
+ passport_issued_date DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
-create type insurance_status as enum('pending', 'accepted', 'rejected');
+CREATE TABLE main.company_details(
+  company_id bigserial PRIMARY KEY,
+  company_name VARCHAR(200) NOT NULL,
+  address_id bigserial NOT NULL REFERENCES main.address(address_id)
+);
 
-CREATE TABLE main.insuranceRequest (
-  insuranceRequestId serial PRIMARY KEY,
-  userId serial NOT NULL REFERENCES main.userData(userId),
-  propertyType VARCHAR (50)  NOT NULL,
+CREATE TABLE main.insurance_request (
+  insurance_request_id bigserial PRIMARY KEY,
+  user_id bigserial NOT NULL REFERENCES main.user_data(user_id),
+  property_type VARCHAR (50)  NOT NULL,
   amount NUMERIC  NOT NULL,
-  policyStartDate DATE NOT NULL DEFAULT CURRENT_DATE,
-  policyEndDate DATE NOT NULL DEFAULT CURRENT_DATE,
-  policyCreatedDate DATE NOT NULL DEFAULT CURRENT_DATE,
-  status insurance_status NOT NULL DEFAULT 'pending'
+  policy_start_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  policy_end_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  policy_created_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  address_id bigserial NOT NULL REFERENCES main.address(address_id),
+  status VARCHAR (20) NOT NULL DEFAULT 'pending',
+  company_id bigserial NOT NULL REFERENCES main.company_details(company_id)
 );
 
-INSERT INTO main.address(houseNum, apartmentNum, street, city, state, country)
+INSERT INTO main.address(house_num, apartment_num, street, city, state, country)
 VALUES
 ('123', 'Dorm3', '1,University st', 'Innopolis', 'Tatarstan', 'Russia');
 
-INSERT INTO main.userData(username, firstName, middleName, lastName, password, email, mobileNum, passportNum, passportIssuedBy, passportIssuedDate)
+INSERT INTO main.user_data(user_id, username, first_name, middle_name, last_name, password, email, mobile_num, passport_num, passport_issued_by, passport_issued_date)
 VALUES
-('nethmih', 'Nethmi', 'Thileka', 'Hettiarachchi', '', 'nethmihettiarachchi484@gmail.com', '+102284587584', '12ws34re', 'Sri Lanka', '2016-06-22');
+(7368799123032394117, 'nethmih', 'Nethmi', 'Thileka', 'Hettiarachchi', '', 'nethmihettiarachchi484@gmail.com', '+102284587584', '12ws34re', 'Sri Lanka', '2016-06-22');
+
+INSERT INTO main.company_details(company_name, address_id)
+VALUES
+('ABC Insurance', 963193294813743558)

@@ -10,39 +10,40 @@ import javax.validation.constraints.NotBlank
 
 
 @Entity
-@Table(name = "insuranceRequest")
+@Table(name = "insurance_request", schema = "main")
 data class Insurance (
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "insuranceRequestId")
-        var insuranceRequestId: Long = 0,
 
-        @OneToOne
-        val userId: User,
+        @Id
+        @Column(name = "insurance_request_id")
+        var insurancerequestid: Long = 0,
 
-        /*  @OneToOne(mappedBy = "insuranceRequest")
-          val addressId: UserAddress,*/
-
-        @get: NotBlank
-        @Column(name = "propertytype")
+        @Column(name = "property_type")
         var propertytype: String = "",
 
-        @get: NotBlank
         @Column(name = "amount")
         var amount: Double = 0.00,
 
-        @get: NotBlank
-        @Column(name = "policystartdate")
+        @Column(name = "policy_start_date")
         var policystartdate: LocalDate,
 
-        @get: NotBlank
-        @Column(name = "policyenddate")
+        @Column(name = "policy_end_date")
         var policyenddate: LocalDate,
 
-        @get: NotBlank
-        @Column(name = "policycreatedcate")
+        @Column(name = "policy_created_date")
         var policycreatedcate: LocalDate,
 
-        @get: NotBlank
         @Column(name = "status")
-        var status: String=""
+        var status: String,
+
+        @ManyToOne
+        @JoinColumn(name="address_id", nullable = false)
+        var address: UserAddress,
+
+        @ManyToOne
+        @JoinColumn(name="user_id", nullable = false)
+        var user: User,
+
+        @OneToOne
+        @JoinColumn(name="company_id", nullable = false)
+        var company: Company
 )

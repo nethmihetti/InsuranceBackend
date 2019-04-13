@@ -1,5 +1,6 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 
@@ -8,20 +9,21 @@ import javax.validation.constraints.NotBlank
  */
 
 @Entity
-@Table(name = "address")
+@Table(name = "address", schema = "main")
 data class UserAddress (
 
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "addressid")
-        var addressid: Long = 0,
+        @Id
+        @JsonIgnore
+        @Column(name = "address_id")
+        var address_id: Long = 0,
 
         @get: NotBlank
-        @Column(name = "housenum")
-        var housenum: String = "",
+        @Column(name = "house_num")
+        var house_num: String = "",
 
         @get: NotBlank
-        @Column(name = "apartmentnum")
-        var apartmentnum: String = "",
+        @Column(name = "apartment_num")
+        var apartment_num: String = "",
 
         @get: NotBlank
         @Column(name = "street")
@@ -38,4 +40,8 @@ data class UserAddress (
         @get: NotBlank
         @Column(name = "country")
         var country: String = ""
+
+/*        @OneToMany
+        @JoinColumn(name="insurancerequestid")
+        var insuranceRequests: List<Insurance>*/
 )

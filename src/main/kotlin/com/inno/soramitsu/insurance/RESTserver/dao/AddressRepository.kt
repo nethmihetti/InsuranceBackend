@@ -15,13 +15,13 @@ import javax.transaction.Transactional
 @Repository
 
 interface AddressRepository : JpaRepository<UserAddress, Long> {
-    @Modifying
-    @Query(value = "insert into address(housenum, apartmentnum, street, city, state, country)" +
-            "VALUES(:#{#newAddress.houseNum},:#{#newAddress.apartmentNum}, :#{#newAddress.street}, :#{#newAddress.city}, :#{#newAddress.state}, :#{#newAddress.country})",
+   /* @Modifying
+    @Query(value = "insert into address(address_id, house_num, apartment_num, street, city, state, country)" +
+            "VALUES(:#{#address.address_id}, :#{#address.house_num}, :#{#address.apartment_num}, :#{#address.street}, :#{#address.city}, :#{#address.state}, :#{#address.country})",
             nativeQuery = true)
 
     @Transactional
-    fun postNewAddress(@Param("newAddress") newAddress: AddressBody)
+    fun postNewAddress(@Param("address") address: UserAddress)*/
 
-    fun findTopByOrderByAddressidDesc(): UserAddress
+   // fun findTopByOrderByAddressidDesc(): UserAddress
 }

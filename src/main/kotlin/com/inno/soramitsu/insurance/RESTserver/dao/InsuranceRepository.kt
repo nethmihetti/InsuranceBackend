@@ -2,6 +2,7 @@ package com.inno.soramitsu.insurance.RESTserver.dao
 
 import com.inno.soramitsu.insurance.RESTserver.model.Insurance
 import com.inno.soramitsu.insurance.RESTserver.model.InsuranceRequestBody
+import com.inno.soramitsu.insurance.RESTserver.model.InsuranceStatusType
 import com.inno.soramitsu.insurance.RESTserver.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
@@ -18,11 +19,19 @@ import javax.transaction.Transactional
 interface InsuranceRepository : JpaRepository<Insurance, Long> {
 
     @Modifying
-    @Query(value = "insert into insurancerequest(userid, propertytype, amount, policystartdate, policyenddate, policycreatedcate, status)" +
-            "VALUES(:#{#userId}, :#{#newRequest.propertyType}, :#{#newRequest.amount}, :#{#newRequest.policyStartDate}, :#{#newRequest.policyEndDate}, :#{#newRequest.policyCreatedDate}, :#{#newRequest.status})",
+    @Query(value = "insert into insurance_request(insurance_request_id, property_type, amount, policy_start_date, policy_end_date, policy_create_dcate, status, address_id, user_id)" +
+            "VALUES(:#{#newRequest.insurancerequestid}, :#{#newRequest.propertyType}, :#{#newRequest.amount}, :#{#newRequest.policyStartDate}, :#{#newRequest.policyEndDate}, :#{#newRequest.policyCreatedDate}, :#{#newRequest.status}, :#{#newRequest.addressid}, :#{#newRequest.userid})",
             nativeQuery = true)
 
     @Transactional
-    fun insertNewInsuranceRequest(@Param("newRequest") newRequest: InsuranceRequestBody, @Param("userId") userId: Long)
+    fun insertNewInsuranceRequest(@Param("newRequest") newRequest: Insurance)
+
+    @Transactional
+    fun findByCompanyCompanyid(@Param("companyId") companyId: Long): List<Insurance>
+
+    @Transactional
+    @Modifying
+    @Query(value = "update insurance_request set status = :#{#status} where insurance_request_id = :#{#insuranceId}", nativeQuery = true)
+    fun updateInsuranceStatus(@Param("insuranceId") insuranceId: Long, @Param("status") status: String)
 
 }

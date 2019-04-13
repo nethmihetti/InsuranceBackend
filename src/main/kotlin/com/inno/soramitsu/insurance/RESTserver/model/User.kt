@@ -1,5 +1,6 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import java.time.LocalDate
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -9,29 +10,31 @@ import javax.validation.constraints.NotBlank
  */
 
 @Entity
-@Table(name = "userData")
+@Table(name = "user_data", schema = "main")
 data class User (
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "userid")
-        var userId: Long = 0,
+        @Id
+        @JsonIgnore
+        @Column(name = "user_id")
+        var user_id: Long = 0,
 
         @get: NotBlank
         @Column(name = "username")
         var username: String = "",
 
         @get: NotBlank
-        @Column(name = "firstname")
-        var firstName: String = "",
+        @Column(name = "first_name")
+        var first_name: String = "",
 
         @get: NotBlank
-        @Column(name = "middlename")
-        var middleName: String = "",
+        @Column(name = "middle_name")
+        var middle_name: String = "",
 
         @get: NotBlank
-        @Column(name = "lastname")
-        var lastName: String = "",
+        @Column(name = "last_name")
+        var last_name: String = "",
 
         @get: NotBlank
+        @JsonIgnore
         @Column(name = "password")
         var password: String = "",
 
@@ -40,21 +43,18 @@ data class User (
         var email: String = "",
 
         @get: NotBlank
-        @Column(name = "mobilenum")
-        var mobileNum: String = "",
+        @Column(name = "mobile_num")
+        var mobile_num: String = "",
 
         @get: NotBlank
-        @Column(name = "passportnum")
-        var passportNum: String = "",
+        @Column(name = "passport_num")
+        var passport_num: String = "",
 
         @get: NotBlank
-        @Column(name = "passportissuedby")
-        var passportIssuedBy: String = "",
+        @Column(name = "passport_issued_by")
+        var passport_issued_by: String = "",
 
-        @get: NotBlank
-        @Column(name = "passportissueddate")
-        var passportIssuedDate: LocalDate,
+        @Column(name = "passport_issued_date")
+        var passport_issued_date: LocalDate
 
-        @OneToOne
-        var address: UserAddress
 )

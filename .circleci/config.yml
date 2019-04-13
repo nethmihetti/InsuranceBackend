@@ -123,6 +123,7 @@ workflows:
             branches:
               only:
               - develop
+              - insuranceRequest
       - deploy_to_stag:
           requires:
             - build_and_test
