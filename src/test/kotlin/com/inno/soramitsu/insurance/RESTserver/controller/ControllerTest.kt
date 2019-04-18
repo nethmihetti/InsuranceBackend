@@ -22,7 +22,7 @@ import java.time.LocalDate
 class ControllerTest {
 
     @InjectMocks
-    lateinit var controller: Controller
+    lateinit var controller: ClientController
 
     @Mock
     lateinit var insuranceService: InsuranceService

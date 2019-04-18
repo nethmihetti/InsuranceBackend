@@ -7,8 +7,14 @@ import com.inno.soramitsu.insurance.RESTserver.dao.UserRepository
 import com.inno.soramitsu.insurance.RESTserver.model.*
 import com.inno.soramitsu.insurance.RESTserver.service.InsuranceService
 import com.inno.soramitsu.insurance.RESTserver.util.ServerUtil
+import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorCodes
+import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorMessages
+import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerExceptions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.math.BigInteger
+import java.time.Instant
+import java.util.*
 import javax.transaction.Transactional
 
 /**
@@ -39,80 +45,98 @@ class InsuranceServiceImpl : InsuranceService {
     @Transactional
     override fun postNewUser(newUser: UserBody) {
 
-        val user = User(ServerUtil.generateRandomId(), newUser.username, newUser.firstName,
-                newUser.middleName, newUser.lastName, newUser.password, newUser.email, newUser.mobileNum,
+        val user = User(ServerUtil.generateRandomId(), newUser.firstName,
+                newUser.middleName, newUser.lastName, newUser.email, newUser.mobileNum,
                 newUser.passportNum, newUser.passportIssuedBy, ServerUtil.convertToLocalDate(newUser.passportIssuedDate))
 
         userRepository.save(user)
 
     }
 
-    override fun postNewAddress(userAddress: AddressBody) {
+    override fun insertNewInsuranceRequest(insuranceRequestBody: InsuranceRequestBody): Insurance {
+
+        val newInsuranceRequest: Insurance
+
         val addressId = ServerUtil.generateRandomId()
-        val address = UserAddress(addressId, userAddress.houseNum, userAddress.apartmentNum, userAddress.street,
-                userAddress.city, userAddress.state, userAddress.country)
+        val insuranceRequestId = ServerUtil.generateRandomId()
 
-        addressRepository.save(address)
-    }
+        // find user by email
+        val user = userRepository.findByEmail(insuranceRequestBody.userEmail)
 
-    override fun insertNewInsuranceRequest(insuranceRequestBody: InsuranceRequestBody) {
-        //post the Address
-        val userAddress = insuranceRequestBody.address
-        val addressId = ServerUtil.generateRandomId()
-        val address = UserAddress(addressId, userAddress.houseNum, userAddress.apartmentNum, userAddress.street,
-                userAddress.city, userAddress.state, userAddress.country)
+        if(user.user_id > BigInteger.ZERO) {
 
-       // addressRepository.postNewAddress(address)
-        val addressSaved = addressRepository.save(address)
+            val userAddress = insuranceRequestBody.address
 
+            //check if the address exist already
+            val addressCount = addressRepository.getAddressCount(userAddress)
+            val addressSaved: UserAddress
 
-        // find user by username
-        val user = userRepository.findByUsername(insuranceRequestBody.username)
+            addressSaved = if(addressCount > 0) {
+                addressRepository.getAddressDetails(userAddress)
+            } else {
+                //post the Address
+                val address = UserAddress(addressId, userAddress.houseNum, userAddress.apartmentNum, userAddress.street,
+                        userAddress.city, userAddress.state, userAddress.country)
 
-        //find company by company Id
-        val company = companyRepository.findByCompanyid(insuranceRequestBody.companyId)
+                addressRepository.save(address)
+            }
 
-        if(addressSaved.address_id > 0 && user.user_id > 0 && company.companyid>0) {
+            //find company by company Id
+            val company = companyRepository.findByCompanyid(insuranceRequestBody.companyId)
 
-            //insert new insurance request
-            val newInsuranceRequest = Insurance(ServerUtil.generateRandomId(), insuranceRequestBody.propertyType,
-                    insuranceRequestBody.amount, ServerUtil.convertToLocalDate(insuranceRequestBody.policyStartDate),
-                    ServerUtil.convertToLocalDate(insuranceRequestBody.policyEndDate),
-                    ServerUtil.convertToLocalDate(insuranceRequestBody.policyCreatedDate),
-                    insuranceRequestBody.status, addressSaved, user, company)
+            if (addressSaved.address_id > BigInteger.ZERO && company.companyid > BigInteger.ZERO) {
 
-            insuranceRepository.save(newInsuranceRequest)
-        } else {
-            System.out.println("company, user or address does not exist")
+                //insert new insurance request
+                newInsuranceRequest = Insurance(insuranceRequestId, insuranceRequestBody.propertyType,
+                        insuranceRequestBody.amount.toDouble(), ServerUtil.convertToLocalDate(insuranceRequestBody.policyStartDate),
+                        ServerUtil.convertToLocalDate(insuranceRequestBody.policyEndDate),
+                        ServerUtil.convertToLocalDate(Date.from(Instant.now())),
+                        InsuranceStatusType.PENDING.type, addressSaved, user, company)
+
+                return insuranceRepository.save(newInsuranceRequest)
+            }
+
         }
+
+        throw ServerExceptions(ServerErrorMessages.INVALID_PARAM_ERROR, ServerErrorCodes.TYPE_INVALID,
+                "please make sure company exist")
 
     }
 
     override fun getInsuranceRequestsForCompany(companyId: Long): List<Insurance> {
-        return insuranceRepository.findByCompanyCompanyid(companyId)
+        return insuranceRepository.findByCompanyCompanyid(BigInteger.valueOf(companyId))
     }
 
-    override fun updateInsuranceStatus(insuranceId: Long, status: InsuranceStatusType) {
-        insuranceRepository.updateInsuranceStatus(insuranceId, status.type)
+    override fun updateInsuranceStatus(insuranceId: Long, status: InsuranceStatusType): Insurance {
+        insuranceRepository.updateInsuranceStatus(BigInteger.valueOf(insuranceId) , status.type)
+
+        return insuranceRepository.findByInsuranceRequestId(BigInteger.valueOf(insuranceId))
     }
 
     override fun insertNewCompany(companyRequestBody: CompanyRequestBody) {
 
         //post the Address
         val userAddress = companyRequestBody.address
+
         val addressId = ServerUtil.generateRandomId()
+        val companyId = ServerUtil.generateRandomId()
+
         val address = UserAddress(addressId, userAddress.houseNum, userAddress.apartmentNum, userAddress.street,
                 userAddress.city, userAddress.state, userAddress.country)
 
         val addressSaved = addressRepository.save(address)
 
-        if(addressSaved.address_id > 0) {
+        if(addressSaved.address_id > BigInteger.ZERO) {
             //post the new company
-            val newCompany = Company(ServerUtil.generateRandomId(), companyRequestBody.CompanyName, addressSaved)
+            val newCompany = Company(companyId, companyRequestBody.CompanyName, addressSaved)
             companyRepository.save(newCompany)
         }
 
 
+    }
+
+    override fun getInsuranceRequestsForClient(email: String): List<Insurance> {
+        return insuranceRepository.findByUserEmail(email)
     }
 
 }

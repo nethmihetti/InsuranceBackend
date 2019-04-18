@@ -1,5 +1,6 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
+import java.math.BigInteger
 import java.util.*
 
 /**
@@ -17,11 +18,9 @@ class AddressBody (
 )
 
 class UserBody (
-        var username: String = "",
         var firstName: String = "",
         var middleName: String = "",
         var lastName: String = "",
-        var password: String = "",
         var email: String = "",
         var mobileNum: String = "",
         var passportNum: String = "",
@@ -38,15 +37,13 @@ enum class InsuranceStatusType(val type: String) {
 
 
 class InsuranceRequestBody (
-    var username: String = "",
+    var userEmail: String,
     var propertyType: String= "",
-    var amount: Double=0.00,
+    var amount: String,
     var policyStartDate: Date,
     var policyEndDate: Date,
-    var policyCreatedDate: Date,
     var address: AddressBody,
-    var status: String=InsuranceStatusType.PENDING.type,
-    var companyId: Long=1
+    var companyId: BigInteger=BigInteger.ONE
 )
 
 class CompanyRequestBody(

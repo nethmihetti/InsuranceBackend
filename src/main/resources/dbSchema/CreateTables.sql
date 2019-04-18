@@ -11,11 +11,9 @@ CREATE TABLE main.address(
 
 CREATE TABLE main.user_data(
  user_id bigserial PRIMARY KEY,
- username VARCHAR (50) UNIQUE NOT NULL,
  first_name VARCHAR (50)  NOT NULL,
  middle_name VARCHAR (50)  NOT NULL,
  last_name VARCHAR (50)  NOT NULL,
- password VARCHAR (200) NOT NULL,
  email VARCHAR (320) UNIQUE NOT NULL,
  mobile_num VARCHAR (20) UNIQUE NOT NULL,
  passport_num VARCHAR (20) UNIQUE NOT NULL,
@@ -33,7 +31,7 @@ CREATE TABLE main.insurance_request (
   insurance_request_id bigserial PRIMARY KEY,
   user_id bigserial NOT NULL REFERENCES main.user_data(user_id),
   property_type VARCHAR (50)  NOT NULL,
-  amount NUMERIC  NOT NULL,
+  amount NUMERIC(15,2)  NOT NULL,
   policy_start_date DATE NOT NULL DEFAULT CURRENT_DATE,
   policy_end_date DATE NOT NULL DEFAULT CURRENT_DATE,
   policy_created_date DATE NOT NULL DEFAULT CURRENT_DATE,

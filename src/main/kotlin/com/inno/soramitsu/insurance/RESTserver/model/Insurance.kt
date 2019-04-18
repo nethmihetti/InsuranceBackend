@@ -1,8 +1,8 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
+import java.math.BigInteger
 import java.time.LocalDate
 import javax.persistence.*
-import javax.validation.constraints.NotBlank
 
 /**
  * Created by nethmih on 17.03.19.
@@ -15,7 +15,7 @@ data class Insurance (
 
         @Id
         @Column(name = "insurance_request_id")
-        var insurancerequestid: Long = 0,
+        var insurancerequestid: BigInteger,
 
         @Column(name = "property_type")
         var propertytype: String = "",

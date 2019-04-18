@@ -38,7 +38,7 @@ class SwaggerConfig {
         return Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo(version))
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.inno.soramitsu.insurance.RESTserver.controller"))
+                .apis(RequestHandlerSelectors.any())
                 .paths(PathSelectors.any())
                 .build()
                 .useDefaultResponseMessages(false)
@@ -48,7 +48,7 @@ class SwaggerConfig {
     private fun apiInfo(version: String): ApiInfo {
         return ApiInfoBuilder()
                 .title("API - Insurance Aggregator Service")
-                .description("All the service calls are handled through this service")
+                .description("All the centralized service calls are handled through this service")
                 .version(version)
                 .build()
     }

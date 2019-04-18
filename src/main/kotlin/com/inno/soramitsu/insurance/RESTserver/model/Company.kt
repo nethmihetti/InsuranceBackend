@@ -1,5 +1,6 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
+import java.math.BigInteger
 import javax.persistence.*
 
 /**
@@ -13,7 +14,7 @@ data class Company (
 
         @Id
         @Column(name = "company_id")
-        var companyid: Long = 0,
+        var companyid: BigInteger,
 
         @Column(name = "company_name")
         var companyname: String = "",

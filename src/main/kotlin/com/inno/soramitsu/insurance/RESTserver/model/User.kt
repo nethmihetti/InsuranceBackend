@@ -1,6 +1,7 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import java.math.BigInteger
 import java.time.LocalDate
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -15,11 +16,7 @@ data class User (
         @Id
         @JsonIgnore
         @Column(name = "user_id")
-        var user_id: Long = 0,
-
-        @get: NotBlank
-        @Column(name = "username")
-        var username: String = "",
+        var user_id: BigInteger,
 
         @get: NotBlank
         @Column(name = "first_name")
@@ -32,11 +29,6 @@ data class User (
         @get: NotBlank
         @Column(name = "last_name")
         var last_name: String = "",
-
-        @get: NotBlank
-        @JsonIgnore
-        @Column(name = "password")
-        var password: String = "",
 
         @get: NotBlank
         @Column(name = "email")
