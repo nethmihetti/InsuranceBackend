@@ -14,20 +14,20 @@ import org.springframework.web.bind.annotation.*
  */
 
 @RestController
-@RequestMapping("/api/V1/client")
+@RequestMapping("/api/V1/clients")
 class ClientController {
 
     @Autowired
     lateinit var insuranceService: InsuranceService
 
-    @PostMapping("/user")
+    @PostMapping("/users")
     fun postNewUser(@RequestBody userBody: UserBody) {
 
             insuranceService.postNewUser(userBody)
 
     }
 
-    @PostMapping("/request")
+    @PostMapping("/requests")
     fun postInsuranceRequest(@RequestBody insuranceRequestBody: InsuranceRequestBody):ResponseEntity<EnvelopedResponse<Any>> {
 
         val request: Insurance = insuranceService.insertNewInsuranceRequest(insuranceRequestBody)
@@ -38,7 +38,7 @@ class ClientController {
 
     }
 
-    @GetMapping("/request")
+    @GetMapping("/requests")
     fun getInsuranceRequestForClient(@RequestParam email: String ) : ResponseEntity<EnvelopedResponse<Any>> {
 
         val requests: List<Insurance>  = insuranceService.getInsuranceRequestsForClient(email)

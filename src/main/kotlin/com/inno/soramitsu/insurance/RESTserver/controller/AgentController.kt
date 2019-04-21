@@ -18,19 +18,19 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("/api/V1/agent")
+@RequestMapping("/api/V1/agents")
 class AgentController {
 
     @Autowired
     lateinit var insuranceService: InsuranceService
 
-    @PostMapping("/company")
+    @PostMapping("/companies")
     fun insertNewCompany(@RequestBody companyRequestBody: CompanyRequestBody) {
         insuranceService.insertNewCompany(companyRequestBody)
 
     }
 
-    @PatchMapping("/request")
+    @PatchMapping("/requests")
     fun updateInsuranceStatus(@RequestParam insuranceId: Long, @RequestParam status: InsuranceStatusType) :
             ResponseEntity<EnvelopedResponse<Any>> {
 
@@ -42,7 +42,7 @@ class AgentController {
 
     }
 
-    @GetMapping("/request")
+    @GetMapping("/requests")
     fun getInsuranceRequests(@RequestParam companyId: Long ) : ResponseEntity<EnvelopedResponse<Any>> {
 
         val requests: List<Insurance> = insuranceService.getInsuranceRequestsForCompany(companyId)
