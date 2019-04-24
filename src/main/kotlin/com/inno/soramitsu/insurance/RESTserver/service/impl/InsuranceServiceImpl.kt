@@ -103,7 +103,10 @@ class InsuranceServiceImpl : InsuranceService {
 
     }
 
-    override fun getInsuranceRequestsForCompany(companyId: Long): List<Insurance> {
+    override fun getInsuranceRequestsForCompany(companyId: Long, status: InsuranceStatusQueryType): List<Insurance> {
+        if(!status.type.equals("all")) {
+            return insuranceRepository.findByCompanyCompanyidAndStatus(BigInteger.valueOf(companyId), status.type)
+        }
         return insuranceRepository.findByCompanyCompanyid(BigInteger.valueOf(companyId))
     }
 

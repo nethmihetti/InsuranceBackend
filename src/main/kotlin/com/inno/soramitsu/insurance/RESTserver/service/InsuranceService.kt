@@ -11,7 +11,7 @@ interface InsuranceService {
     fun postNewUser(newUser: UserBody)
     fun insertNewInsuranceRequest(insuranceRequestBody: InsuranceRequestBody): Insurance
 
-    fun getInsuranceRequestsForCompany(companyId: Long): List<Insurance>
+    fun getInsuranceRequestsForCompany(companyId: Long, status: InsuranceStatusQueryType): List<Insurance>
 
     fun updateInsuranceStatus(insuranceId: Long, status: InsuranceStatusType): Insurance
 

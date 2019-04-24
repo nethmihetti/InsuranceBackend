@@ -31,6 +31,10 @@ interface InsuranceRepository : JpaRepository<Insurance, Long> {
     fun findByCompanyCompanyid(@Param("companyId") companyId: BigInteger): List<Insurance>
 
     @Transactional
+    fun findByCompanyCompanyidAndStatus(@Param("companyId") companyId: BigInteger,
+                                         @Param("status") status: String): List<Insurance>
+
+    @Transactional
     @Modifying
     @Query(value = "update insurance_request set status = :#{#status} where insurance_request_id = :#{#insuranceId}", nativeQuery = true)
     fun updateInsuranceStatus(@Param("insuranceId") insuranceId: BigInteger, @Param("status") status: String)

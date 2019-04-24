@@ -35,6 +35,13 @@ enum class InsuranceStatusType(val type: String) {
     REJECTED("rejected")
 }
 
+enum class InsuranceStatusQueryType(val type: String) {
+    PENDING("pending"),
+    ACCEPTED("accepted"),
+    REJECTED("rejected"),
+    ALL("all")
+}
+
 
 class InsuranceRequestBody (
     var userEmail: String,

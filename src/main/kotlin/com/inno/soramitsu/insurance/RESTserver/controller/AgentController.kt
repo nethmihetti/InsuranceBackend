@@ -2,6 +2,7 @@ package com.inno.soramitsu.insurance.RESTserver.controller
 
 import com.inno.soramitsu.insurance.RESTserver.model.CompanyRequestBody
 import com.inno.soramitsu.insurance.RESTserver.model.Insurance
+import com.inno.soramitsu.insurance.RESTserver.model.InsuranceStatusQueryType
 import com.inno.soramitsu.insurance.RESTserver.model.InsuranceStatusType
 import com.inno.soramitsu.insurance.RESTserver.model.envelope.EnvelopedResponse
 import com.inno.soramitsu.insurance.RESTserver.service.InsuranceService
@@ -43,9 +44,10 @@ class AgentController {
     }
 
     @GetMapping("/requests")
-    fun getInsuranceRequests(@RequestParam companyId: Long ) : ResponseEntity<EnvelopedResponse<Any>> {
+    fun getInsuranceRequests(@RequestParam companyId: Long, @RequestParam status: InsuranceStatusQueryType)
+            : ResponseEntity<EnvelopedResponse<Any>> {
 
-        val requests: List<Insurance> = insuranceService.getInsuranceRequestsForCompany(companyId)
+        val requests: List<Insurance> = insuranceService.getInsuranceRequestsForCompany(companyId, status)
 
         val envelopedResponse: EnvelopedResponse<Any>  = ResponseUtil.generateResponse(requests)
 
