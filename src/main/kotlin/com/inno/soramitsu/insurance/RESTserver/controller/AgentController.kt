@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/V1/agents")
+@CrossOrigin
 class AgentController {
 
     @Autowired

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/V1/clients")
+@CrossOrigin
 class ClientController {
 
     @Autowired
