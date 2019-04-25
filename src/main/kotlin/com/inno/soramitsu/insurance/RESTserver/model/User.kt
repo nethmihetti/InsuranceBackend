@@ -1,7 +1,8 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import java.math.BigInteger
+import lombok.AllArgsConstructor
+import lombok.NoArgsConstructor
 import java.time.LocalDate
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -12,11 +13,15 @@ import javax.validation.constraints.NotBlank
 
 @Entity
 @Table(name = "user_data", schema = "main")
+@NoArgsConstructor
+@AllArgsConstructor
 data class User (
+
         @Id
         @JsonIgnore
         @Column(name = "user_id")
-        var user_id: BigInteger,
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var user_id: Long,
 
         @get: NotBlank
         @Column(name = "first_name")

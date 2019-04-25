@@ -4,7 +4,6 @@ import com.inno.soramitsu.insurance.RESTserver.model.Company
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
-import java.math.BigInteger
 import javax.transaction.Transactional
 
 /**
@@ -15,5 +14,5 @@ import javax.transaction.Transactional
 
 interface CompanyRepository : JpaRepository<Company, Long> {
     @Transactional
-    fun findByCompanyid(@Param("companyId") companyId: BigInteger): Company
+    fun findByCompanyid(@Param("companyId") companyId: Long): Company
 }

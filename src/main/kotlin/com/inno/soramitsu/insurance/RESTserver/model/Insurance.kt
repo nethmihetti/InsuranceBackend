@@ -1,6 +1,5 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
-import java.math.BigInteger
 import java.time.LocalDate
 import javax.persistence.*
 
@@ -15,7 +14,8 @@ data class Insurance (
 
         @Id
         @Column(name = "insurance_request_id")
-        var insurancerequestid: BigInteger,
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var insurancerequestid: Long,
 
         @Column(name = "property_type")
         var propertytype: String = "",

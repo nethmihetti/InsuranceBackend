@@ -1,6 +1,5 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
-import java.math.BigInteger
 import java.util.*
 
 /**
@@ -50,7 +49,7 @@ class InsuranceRequestBody (
     var policyStartDate: Date,
     var policyEndDate: Date,
     var address: AddressBody,
-    var companyId: BigInteger=BigInteger.ONE
+    var companyId: Long=1
 )
 
 class CompanyRequestBody(

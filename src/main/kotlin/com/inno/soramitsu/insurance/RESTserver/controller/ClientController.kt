@@ -22,9 +22,14 @@ class ClientController {
     lateinit var insuranceService: InsuranceService
 
     @PostMapping("/users")
-    fun postNewUser(@RequestBody userBody: UserBody) {
+    fun postNewUser(@RequestBody userBody: UserBody):ResponseEntity<EnvelopedResponse<Any>> {
 
-            insuranceService.postNewUser(userBody)
+
+        val user: User = insuranceService.postNewUser(userBody)
+
+        val envelopedResponse: EnvelopedResponse<Any> = ResponseUtil.generateResponse(user)
+
+        return ResponseEntity(envelopedResponse, HttpStatus.CREATED)
 
     }
 

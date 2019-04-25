@@ -1,7 +1,6 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import java.math.BigInteger
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 
@@ -16,7 +15,8 @@ data class UserAddress (
         @Id
         @JsonIgnore
         @Column(name = "address_id")
-        var address_id: BigInteger,
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var address_id: Long,
 
         @get: NotBlank
         @Column(name = "house_num")

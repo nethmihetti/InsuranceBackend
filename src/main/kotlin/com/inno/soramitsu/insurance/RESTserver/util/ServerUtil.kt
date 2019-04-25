@@ -1,7 +1,6 @@
 package com.inno.soramitsu.insurance.RESTserver.util
 
 import java.lang.Long.MAX_VALUE
-import java.math.BigInteger
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
@@ -13,11 +12,8 @@ import java.util.*
 
 object ServerUtil {
 
-    fun generateRandomId(): BigInteger{
-        return BigInteger.valueOf(UUID.randomUUID().mostSignificantBits and MAX_VALUE)
-    /*    val rand = Random()
-        return BigInteger(999999999, rand)*/
-
+    fun generateRandomId(): Long{
+        return UUID.randomUUID().mostSignificantBits and MAX_VALUE
     }
 
     fun convertToLocalDate(date: Date) : LocalDate {

@@ -12,7 +12,6 @@ import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorMessage
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerExceptions
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.math.BigInteger
 import java.time.Instant
 import java.util.*
 import javax.transaction.Transactional
@@ -43,13 +42,13 @@ class InsuranceServiceImpl : InsuranceService {
     }
 
     @Transactional
-    override fun postNewUser(newUser: UserBody) {
+    override fun postNewUser(newUser: UserBody): User {
 
         val user = User(ServerUtil.generateRandomId(), newUser.firstName,
                 newUser.middleName, newUser.lastName, newUser.email, newUser.mobileNum,
                 newUser.passportNum, newUser.passportIssuedBy, ServerUtil.convertToLocalDate(newUser.passportIssuedDate))
 
-        userRepository.save(user)
+        return userRepository.save(user)
 
     }
 
@@ -57,13 +56,10 @@ class InsuranceServiceImpl : InsuranceService {
 
         val newInsuranceRequest: Insurance
 
-        val addressId = ServerUtil.generateRandomId()
-        val insuranceRequestId = ServerUtil.generateRandomId()
-
         // find user by email
         val user = userRepository.findByEmail(insuranceRequestBody.userEmail)
 
-        if(user.user_id > BigInteger.ZERO) {
+        if(user.user_id > 0) {
 
             val userAddress = insuranceRequestBody.address
 
@@ -75,7 +71,7 @@ class InsuranceServiceImpl : InsuranceService {
                 addressRepository.getAddressDetails(userAddress)
             } else {
                 //post the Address
-                val address = UserAddress(addressId, userAddress.houseNum, userAddress.apartmentNum, userAddress.street,
+                val address = UserAddress(ServerUtil.generateRandomId(), userAddress.houseNum, userAddress.apartmentNum, userAddress.street,
                         userAddress.city, userAddress.state, userAddress.country)
 
                 addressRepository.save(address)
@@ -84,10 +80,10 @@ class InsuranceServiceImpl : InsuranceService {
             //find company by company Id
             val company = companyRepository.findByCompanyid(insuranceRequestBody.companyId)
 
-            if (addressSaved.address_id > BigInteger.ZERO && company.companyid > BigInteger.ZERO) {
+            if (addressSaved.address_id > 0 && company.companyid > 0) {
 
                 //insert new insurance request
-                newInsuranceRequest = Insurance(insuranceRequestId, insuranceRequestBody.propertyType,
+                newInsuranceRequest = Insurance(ServerUtil.generateRandomId(), insuranceRequestBody.propertyType,
                         insuranceRequestBody.amount.toDouble(), ServerUtil.convertToLocalDate(insuranceRequestBody.policyStartDate),
                         ServerUtil.convertToLocalDate(insuranceRequestBody.policyEndDate),
                         ServerUtil.convertToLocalDate(Date.from(Instant.now())),
@@ -105,37 +101,35 @@ class InsuranceServiceImpl : InsuranceService {
 
     override fun getInsuranceRequestsForCompany(companyId: Long, status: InsuranceStatusQueryType): List<Insurance> {
         if(!status.type.equals("all")) {
-            return insuranceRepository.findByCompanyCompanyidAndStatus(BigInteger.valueOf(companyId), status.type)
+            return insuranceRepository.findByCompanyCompanyidAndStatus(companyId, status.type)
         }
-        return insuranceRepository.findByCompanyCompanyid(BigInteger.valueOf(companyId))
+        return insuranceRepository.findByCompanyCompanyid(companyId)
     }
 
     override fun updateInsuranceStatus(insuranceId: Long, status: InsuranceStatusType): Insurance {
-        insuranceRepository.updateInsuranceStatus(BigInteger.valueOf(insuranceId) , status.type)
+        insuranceRepository.updateInsuranceStatus(insuranceId , status.type)
 
-        return insuranceRepository.findByInsuranceRequestId(BigInteger.valueOf(insuranceId))
+        return insuranceRepository.findByInsuranceRequestId(insuranceId)
     }
 
-    override fun insertNewCompany(companyRequestBody: CompanyRequestBody) {
+    override fun insertNewCompany(companyRequestBody: CompanyRequestBody): Company {
 
         //post the Address
         val userAddress = companyRequestBody.address
 
-        val addressId = ServerUtil.generateRandomId()
-        val companyId = ServerUtil.generateRandomId()
-
-        val address = UserAddress(addressId, userAddress.houseNum, userAddress.apartmentNum, userAddress.street,
+        val address = UserAddress(ServerUtil.generateRandomId(), userAddress.houseNum, userAddress.apartmentNum, userAddress.street,
                 userAddress.city, userAddress.state, userAddress.country)
 
         val addressSaved = addressRepository.save(address)
 
-        if(addressSaved.address_id > BigInteger.ZERO) {
+        if(addressSaved.address_id > 0) {
             //post the new company
-            val newCompany = Company(companyId, companyRequestBody.CompanyName, addressSaved)
-            companyRepository.save(newCompany)
+            val newCompany = Company(ServerUtil.generateRandomId(), companyRequestBody.CompanyName, addressSaved)
+            return companyRepository.save(newCompany)
         }
 
-
+        throw ServerExceptions(ServerErrorMessages.NULL_RESPONSE_FROM_DATABASE, ServerErrorCodes.TYPE_INVALID,
+                "error inserting the company address or company details")
     }
 
     override fun getInsuranceRequestsForClient(email: String): List<Insurance> {

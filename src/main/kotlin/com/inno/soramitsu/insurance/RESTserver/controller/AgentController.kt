@@ -1,9 +1,6 @@
 package com.inno.soramitsu.insurance.RESTserver.controller
 
-import com.inno.soramitsu.insurance.RESTserver.model.CompanyRequestBody
-import com.inno.soramitsu.insurance.RESTserver.model.Insurance
-import com.inno.soramitsu.insurance.RESTserver.model.InsuranceStatusQueryType
-import com.inno.soramitsu.insurance.RESTserver.model.InsuranceStatusType
+import com.inno.soramitsu.insurance.RESTserver.model.*
 import com.inno.soramitsu.insurance.RESTserver.model.envelope.EnvelopedResponse
 import com.inno.soramitsu.insurance.RESTserver.service.InsuranceService
 import com.inno.soramitsu.insurance.RESTserver.util.ResponseUtil
@@ -27,8 +24,14 @@ class AgentController {
     lateinit var insuranceService: InsuranceService
 
     @PostMapping("/companies")
-    fun insertNewCompany(@RequestBody companyRequestBody: CompanyRequestBody) {
-        insuranceService.insertNewCompany(companyRequestBody)
+    fun insertNewCompany(@RequestBody companyRequestBody: CompanyRequestBody) : ResponseEntity<EnvelopedResponse<Any>> {
+
+
+        val company: Company = insuranceService.insertNewCompany(companyRequestBody)
+
+        val envelopedResponse: EnvelopedResponse<Any> = ResponseUtil.generateResponse(company)
+
+        return ResponseEntity(envelopedResponse, HttpStatus.CREATED)
 
     }
 
