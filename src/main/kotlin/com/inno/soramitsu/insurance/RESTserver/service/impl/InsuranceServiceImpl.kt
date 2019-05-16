@@ -124,7 +124,7 @@ class InsuranceServiceImpl : InsuranceService {
 
         if(addressSaved.address_id > 0) {
             //post the new company
-            val newCompany = Company(ServerUtil.generateRandomId(), companyRequestBody.CompanyName, addressSaved)
+            val newCompany = Company(ServerUtil.generateRandomId(), companyRequestBody.companyName, addressSaved)
             return companyRepository.save(newCompany)
         }
 

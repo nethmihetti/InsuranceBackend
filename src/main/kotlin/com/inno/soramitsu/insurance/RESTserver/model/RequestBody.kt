@@ -53,6 +53,6 @@ class InsuranceRequestBody (
 )
 
 class CompanyRequestBody(
-    var CompanyName: String ="",
+    var companyName: String ="",
     var address: AddressBody
 )
