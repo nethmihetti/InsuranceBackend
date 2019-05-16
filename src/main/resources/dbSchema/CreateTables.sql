@@ -40,6 +40,13 @@ CREATE TABLE main.insurance_request (
   company_id serial NOT NULL REFERENCES main.company_details(company_id)
 );
 
+CREATE TABLE main.insurance_agents (
+  agent_id serial PRIMARY KEY,
+  email VARCHAR(320) UNIQUE NOT NULL ,
+  password VARCHAR (50)  NOT NULL,
+  company_id serial NOT NULL REFERENCES main.company_details(company_id)
+);
+
 INSERT INTO main.address(house_num, apartment_num, street, city, state, country)
 VALUES
 ('123', 'Dorm3', '1,University st', 'Innopolis', 'Tatarstan', 'Russia');

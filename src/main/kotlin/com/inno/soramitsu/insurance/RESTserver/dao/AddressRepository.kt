@@ -12,7 +12,6 @@ import javax.transaction.Transactional
  * Created by nethmih on 10.04.19.
  */
 @Repository
-
 interface AddressRepository : JpaRepository<UserAddress, Long> {
 
     @Transactional

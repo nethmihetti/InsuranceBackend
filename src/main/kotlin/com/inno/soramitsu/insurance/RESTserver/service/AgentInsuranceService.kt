@@ -6,12 +6,7 @@ import com.inno.soramitsu.insurance.RESTserver.model.*
  * Created by nethmih on 17.03.19.
  */
 
-interface InsuranceService {
-    fun getAllInsuranceBoxProducts() : List<Insurance>
-
-    fun postNewUser(newUser: UserBody) : User
-
-    fun insertNewInsuranceRequest(insuranceRequestBody: InsuranceRequestBody): Insurance
+interface AgentInsuranceService {
 
     fun getInsuranceRequestsForCompany(companyId: Long, status: InsuranceStatusQueryType): List<Insurance>
 
@@ -19,5 +14,6 @@ interface InsuranceService {
 
     fun insertNewCompany(companyRequestBody: CompanyRequestBody): Company
 
-    fun getInsuranceRequestsForClient(email: String): List<Insurance>
+    fun postNewAgent(agentSignURequestBody: AgentSignURequestBody) : Agent
+
 }

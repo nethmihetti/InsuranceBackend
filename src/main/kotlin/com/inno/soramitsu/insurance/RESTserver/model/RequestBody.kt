@@ -56,3 +56,9 @@ class CompanyRequestBody(
     var companyName: String ="",
     var address: AddressBody
 )
+
+class AgentSignURequestBody(
+    var email: String,
+    var password: String,
+    var companyId: Long=1
+)

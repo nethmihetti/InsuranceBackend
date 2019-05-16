@@ -5,7 +5,7 @@ import com.inno.soramitsu.insurance.RESTserver.dao.CompanyRepository
 import com.inno.soramitsu.insurance.RESTserver.dao.InsuranceRepository
 import com.inno.soramitsu.insurance.RESTserver.dao.UserRepository
 import com.inno.soramitsu.insurance.RESTserver.model.*
-import com.inno.soramitsu.insurance.RESTserver.service.InsuranceService
+import com.inno.soramitsu.insurance.RESTserver.service.ClientInsuranceService
 import com.inno.soramitsu.insurance.RESTserver.util.ServerUtil
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorCodes
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorMessages
@@ -17,12 +17,12 @@ import java.util.*
 import javax.transaction.Transactional
 
 /**
- * Created by nethmih on 17.03.19.
+ * Created by nethmih on 16.05.19.
  */
 
-@Service("insuranceService")
+@Service("clientInsuranceService")
 @Transactional
-class InsuranceServiceImpl : InsuranceService {
+class ClientInsuranceServiceImpl : ClientInsuranceService {
 
     @Autowired
     lateinit var insuranceRepository: InsuranceRepository
@@ -31,17 +31,12 @@ class InsuranceServiceImpl : InsuranceService {
     lateinit var addressRepository: AddressRepository
 
     @Autowired
-    lateinit var userRepository: UserRepository
-
-    @Autowired
     lateinit var companyRepository: CompanyRepository
 
-    override fun getAllInsuranceBoxProducts(): List<Insurance> {
+    @Autowired
+    lateinit var userRepository: UserRepository
 
-        return insuranceRepository.findAll()
-    }
 
-    @Transactional
     override fun postNewUser(newUser: UserBody): User {
 
         val user = User(ServerUtil.generateRandomId(), newUser.firstName,
@@ -99,41 +94,7 @@ class InsuranceServiceImpl : InsuranceService {
 
     }
 
-    override fun getInsuranceRequestsForCompany(companyId: Long, status: InsuranceStatusQueryType): List<Insurance> {
-        if(!status.type.equals("all")) {
-            return insuranceRepository.findByCompanyCompanyidAndStatus(companyId, status.type)
-        }
-        return insuranceRepository.findByCompanyCompanyid(companyId)
-    }
-
-    override fun updateInsuranceStatus(insuranceId: Long, status: InsuranceStatusType): Insurance {
-        insuranceRepository.updateInsuranceStatus(insuranceId , status.type)
-
-        return insuranceRepository.findByInsuranceRequestId(insuranceId)
-    }
-
-    override fun insertNewCompany(companyRequestBody: CompanyRequestBody): Company {
-
-        //post the Address
-        val userAddress = companyRequestBody.address
-
-        val address = UserAddress(ServerUtil.generateRandomId(), userAddress.houseNum, userAddress.apartmentNum, userAddress.street,
-                userAddress.city, userAddress.state, userAddress.country)
-
-        val addressSaved = addressRepository.save(address)
-
-        if(addressSaved.address_id > 0) {
-            //post the new company
-            val newCompany = Company(ServerUtil.generateRandomId(), companyRequestBody.companyName, addressSaved)
-            return companyRepository.save(newCompany)
-        }
-
-        throw ServerExceptions(ServerErrorMessages.NULL_RESPONSE_FROM_DATABASE, ServerErrorCodes.TYPE_INVALID,
-                "error inserting the company address or company details")
-    }
-
     override fun getInsuranceRequestsForClient(email: String): List<Insurance> {
         return insuranceRepository.findByUserEmail(email)
     }
-
 }
