@@ -6,19 +6,34 @@ plugins {
 }
 
 project.ext {
-	swaggerVersion = '2.6.0'
+	swaggerVersion = '2.9.2'
+	lombokVersion = '1.16.10'
+	jacocoVersion = '0.8.2'
 }
 
 apply plugin: 'idea'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'jacoco'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'org.springframework.boot'
 
 group = 'com.inno.soramitsu.insurance'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+
+
+//mainClassName = 'com.inno.soramitsu.insurance.RESTserver.ResTserverApplication'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+}
+
+jar {
+	baseName = 'Insurance-REST-Server'
+	version =  '1.0.0'
 }
 
 dependencies {
@@ -27,6 +42,7 @@ dependencies {
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testCompile group: 'junit', name: 'junit', version: '4.12'
 
 	// JPA Data (We are going to use Repositories, Entities, Hibernate, etc...)
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -40,8 +56,16 @@ dependencies {
 	compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
 	
 	//swagger
-	compile 'io.springfox:springfox-swagger2:' + swaggerVersion
-	compile 'io.springfox:springfox-swagger-ui:' + swaggerVersion
+	//compile 'io.springfox:springfox-swagger2:' + swaggerVersion
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: swaggerVersion
+	//compile 'io.springfox:springfox-swagger-ui:' + swaggerVersion
+// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: swaggerVersion
+
+	//envelop response
+	compile("org.springframework.boot:spring-boot-starter-hateoas")
+
+	compile 'org.projectlombok:lombok:' + lombokVersion
 
 }
 
@@ -52,13 +76,14 @@ compileKotlin {
 	}
 }
 
-compileTestKotlin {
-	kotlinOptions {
-		freeCompilerArgs = ['-Xjsr305=strict']
-		jvmTarget = '1.8'
-	}
+jacoco {
+	toolVersion = jacocoVersion
 }
 
-jacoco {
-	toolVersion = "0.7.6+"
+jacocoTestReport {
+	reports {
+		html.enabled = true
+		xml.enabled = true
+		csv.enabled = true
+	}
 }

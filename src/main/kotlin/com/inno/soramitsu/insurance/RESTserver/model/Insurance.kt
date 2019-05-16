@@ -1,8 +1,7 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
-import java.util.*
+import java.time.LocalDate
 import javax.persistence.*
-import javax.validation.constraints.NotBlank
 
 /**
  * Created by nethmih on 17.03.19.
@@ -10,21 +9,41 @@ import javax.validation.constraints.NotBlank
 
 
 @Entity
-@Table(name = "insuranceboxproducts")
+@Table(name = "insurance_request", schema = "main")
 data class Insurance (
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "id")
-        var id: Long = 0,
 
-        @get: NotBlank
-        @Column(name = "title")
-        var title: String = "",
+        @Id
+        @Column(name = "insurance_request_id")
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        var insurancerequestid: Long,
 
-        @get: NotBlank
-        @Column(name = "content")
-        var content: String = "",
+        @Column(name = "property_type")
+        var propertytype: String = "",
 
-        @get: NotBlank
-        @Column(name = "date_prod")
-        var date_prod: Date
+        @Column(name = "amount")
+        var amount: Double = 0.00,
+
+        @Column(name = "policy_start_date")
+        var policystartdate: LocalDate,
+
+        @Column(name = "policy_end_date")
+        var policyenddate: LocalDate,
+
+        @Column(name = "policy_created_date")
+        var policycreatedcate: LocalDate,
+
+        @Column(name = "status")
+        var status: String,
+
+        @ManyToOne
+        @JoinColumn(name="address_id", nullable = false)
+        var address: UserAddress,
+
+        @ManyToOne
+        @JoinColumn(name="user_id", nullable = false)
+        var user: User,
+
+        @OneToOne
+        @JoinColumn(name="company_id", nullable = false)
+        var company: Company
 )
