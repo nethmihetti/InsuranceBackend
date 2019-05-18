@@ -52,8 +52,8 @@ jobs:
               --no-cache -f infrastructure/Dockerfile \
               --build-arg COMMIT_REF=${CIRCLE_SHA1} \
               -t ${PROJECT_ID} .
-            docker tag ${PROJECT_ID} nethmih/insurance_aggrgator_soramitsu/${PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
-            docker push nethmih/insurance_aggrgator_soramitsu:${CIRCLE_SHA1}
+            docker tag ${PROJECT_ID} nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
+            docker push nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
 
   deploy_to_stag:
     docker:
