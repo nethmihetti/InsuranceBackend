@@ -56,7 +56,7 @@ jobs:
       - run:
           name: Deploy to university virtual machine
           command: |
-            apt-get install sshpass
+            sudo apt-get install sshpass
             sshpass -p 1qaz2wsx@ ssh root@10.90.137.18
             docker pull nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
             docker run -d -p 8080:8080 nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
