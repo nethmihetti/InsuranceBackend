@@ -36,11 +36,11 @@ jobs:
 
 
   deploy_to_dev:
-    docker:
-      - image: google/cloud-sdk
     environment:
       - DOCKER_PASSWORD: "N1qaz2wsx@"
       - PROJECT_ID: "insuranceaggregatorbackend"
+    machine:
+      enabled: true
     steps:
       - checkout
       - setup_remote_docker
@@ -54,6 +54,13 @@ jobs:
               -t ${PROJECT_ID} .
             docker tag ${PROJECT_ID} nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
             docker push nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
+      - run:
+          name: Deploy to university virtual machine
+          command: |
+            apt-get install sshpass
+            sshpass -p 1qaz2wsx@ ssh root@10.90.137.18
+            docker pull nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
+            docker run -d -p 8080:8080 nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
 
   deploy_to_stag:
     docker:
