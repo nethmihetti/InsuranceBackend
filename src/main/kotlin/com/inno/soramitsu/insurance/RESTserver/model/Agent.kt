@@ -15,8 +15,8 @@ data class Agent (
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         var agentid: Long,
 
-        @Column(name = "email")
-        var email: String = "",
+        @Column(name = "username")
+        var username: String = "",
 
         @Column(name = "password")
         var password: String = "",

@@ -48,11 +48,11 @@ class JWTAuthorizationFilter(authenticationManager: AuthenticationManager) : Bas
                     .body
                     .subject
 
-            if (user != null) {
-                return UsernamePasswordAuthenticationToken(user, null, ArrayList<GrantedAuthority>())
-            }
-
+            return if (user != null)
+                UsernamePasswordAuthenticationToken(user, null, emptyList<GrantedAuthority>())
+            else
+                null
         }
-    return null
+        return null
     }
 }

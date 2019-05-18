@@ -17,10 +17,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/V1/clients")
 @CrossOrigin
-class ClientController {
-
-    @Autowired
-    lateinit var clientInsuranceService: ClientInsuranceService
+class ClientController(private val clientInsuranceService: ClientInsuranceService) {
 
     @PostMapping("/users")
     fun postNewUser(@RequestBody userBody: UserBody):ResponseEntity<EnvelopedResponse<Any>> {

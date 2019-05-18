@@ -3,8 +3,9 @@ package com.inno.soramitsu.insurance.RESTserver.controller
 import com.inno.soramitsu.insurance.RESTserver.model.*
 import com.inno.soramitsu.insurance.RESTserver.model.envelope.EnvelopedResponse
 import com.inno.soramitsu.insurance.RESTserver.service.AgentInsuranceService
+import com.inno.soramitsu.insurance.RESTserver.service.AuthenticationService
+import com.inno.soramitsu.insurance.RESTserver.service.impl.AuthenticationServiceImpl
 import com.inno.soramitsu.insurance.RESTserver.util.ResponseUtil
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -15,30 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
  * Created by nethmih on 14.04.19.
  */
 
-
 @RestController
 @RequestMapping("/api/V1/agents")
 @CrossOrigin
-class AgentController {
-
-    @Autowired
-    lateinit var agentInsuranceService: AgentInsuranceService
-
-    @Autowired
-    lateinit var bCryptPasswordEncoder: BCryptPasswordEncoder
-
-    @PostMapping("/signUp")
-    fun postNewAgent(@RequestParam agentSignURequestBody:AgentSignURequestBody): ResponseEntity<EnvelopedResponse<Any>> {
-
-        agentSignURequestBody.password = bCryptPasswordEncoder.encode(agentSignURequestBody.password)
-
-        val agent: Agent = agentInsuranceService.postNewAgent(agentSignURequestBody)
-
-        val envelopedResponse: EnvelopedResponse<Any> = ResponseUtil.generateResponse(agent)
-
-        return ResponseEntity(envelopedResponse, HttpStatus.CREATED)
-
-    }
+class AgentController(private val agentInsuranceService: AgentInsuranceService) {
 
     @PostMapping("/companies")
     fun insertNewCompany(@RequestBody companyRequestBody: CompanyRequestBody) : ResponseEntity<EnvelopedResponse<Any>> {

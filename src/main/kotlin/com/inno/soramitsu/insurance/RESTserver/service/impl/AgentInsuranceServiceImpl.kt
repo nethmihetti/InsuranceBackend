@@ -7,10 +7,7 @@ import com.inno.soramitsu.insurance.RESTserver.util.ServerUtil
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorCodes
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorMessages
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerExceptions
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.time.Instant
-import java.util.*
 import javax.transaction.Transactional
 
 /**
@@ -19,20 +16,9 @@ import javax.transaction.Transactional
 
 @Service("agentInsuranceService")
 @Transactional
-class AgentInsuranceServiceImpl : AgentInsuranceService {
-
-    @Autowired
-    lateinit var insuranceRepository: InsuranceRepository
-
-    @Autowired
-    lateinit var addressRepository: AddressRepository
-
-    @Autowired
-    lateinit var companyRepository: CompanyRepository
-
-    @Autowired
-    lateinit var agentRepository: AgentRepository
-
+class AgentInsuranceServiceImpl(private val insuranceRepository: InsuranceRepository,
+                                private val addressRepository: AddressRepository,
+                                private val companyRepository: CompanyRepository) : AgentInsuranceService {
 
     override fun getInsuranceRequestsForCompany(companyId: Long, status: InsuranceStatusQueryType): List<Insurance> {
         if(!status.type.equals("all")) {
@@ -65,15 +51,6 @@ class AgentInsuranceServiceImpl : AgentInsuranceService {
 
         throw ServerExceptions(ServerErrorMessages.NULL_RESPONSE_FROM_DATABASE, ServerErrorCodes.TYPE_INVALID,
                 "error inserting the company address or company details")
-    }
-
-    override fun postNewAgent(agentSignURequestBody: AgentSignURequestBody) : Agent {
-
-        val company: Company = companyRepository.findByCompanyid(agentSignURequestBody.companyId)
-
-        val newAgent = Agent(ServerUtil.generateRandomId(), agentSignURequestBody.email, agentSignURequestBody.password, company)
-
-        return agentRepository.save(newAgent)
     }
 
 }

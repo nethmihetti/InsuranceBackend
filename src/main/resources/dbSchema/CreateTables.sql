@@ -42,8 +42,8 @@ CREATE TABLE main.insurance_request (
 
 CREATE TABLE main.insurance_agents (
   agent_id serial PRIMARY KEY,
-  email VARCHAR(320) UNIQUE NOT NULL ,
-  password VARCHAR (50)  NOT NULL,
+  username VARCHAR(320) UNIQUE NOT NULL ,
+  password VARCHAR (400)  NOT NULL,
   company_id serial NOT NULL REFERENCES main.company_details(company_id)
 );
 

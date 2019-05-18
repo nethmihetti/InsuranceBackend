@@ -21,29 +21,32 @@ import javax.servlet.ServletException
 
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import org.springframework.security.core.userdetails.User
 
 
 /**
  * Created by nethmih on 16.05.19.
  */
 
-class JWTAuthenticationFilter(private val authManager: AuthenticationManager): UsernamePasswordAuthenticationFilter() {
+class JWTAuthenticationFilter(authManager: AuthenticationManager): UsernamePasswordAuthenticationFilter() {
 
-    @Throws(AuthenticationException::class)
+    init {
+        authenticationManager = authManager
+    }
+
+    @Throws(AuthenticationException::class, IOException::class, ServletException::class)
     override fun attemptAuthentication(req: HttpServletRequest, res: HttpServletResponse): Authentication {
-        try {
-            val creds = ObjectMapper()
-                    .readValue(req.inputStream, Agent::class.java)
 
-            return this.authManager.authenticate(
-                    UsernamePasswordAuthenticationToken(
-                            creds.email,
-                            creds.password,
-                            ArrayList<GrantedAuthority>())
-            )
-        } catch (e: IOException) {
-            throw RuntimeException(e)
-        }
+        val creds = ObjectMapper()
+                .readValue(req.inputStream, Agent::class.java)
+
+        return authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                        creds.username,
+                        creds.password,
+                        emptyList<GrantedAuthority>())
+        )
+
     }
 
     @Throws(IOException::class, ServletException::class)
@@ -52,11 +55,11 @@ class JWTAuthenticationFilter(private val authManager: AuthenticationManager): U
 
 
         val token: String = Jwts.builder()
-                .setSubject((auth.principal as Agent).email)
+                .setSubject((auth.principal as User).username)
                 .setExpiration(Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact()
 
-        res.addHeader(HEADER_STRING, TOKEN_PREFIX + token)
+        res.addHeader(HEADER_STRING, "$TOKEN_PREFIX $token")
     }
 }
