@@ -36,8 +36,6 @@ jobs:
 
 
   deploy_to_dev:
-    docker:
-      - image: circleci/openjdk:11.0.1-jdk
     environment:
       - DOCKER_PASSWORD: "N1qaz2wsx@"
       - PROJECT_ID: "insuranceaggregatorbackend"
