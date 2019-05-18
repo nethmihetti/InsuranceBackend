@@ -43,7 +43,6 @@ jobs:
       enabled: true
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           name: Docker build and push
           command: |
