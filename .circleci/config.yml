@@ -118,16 +118,16 @@ workflows:
           filters:
             branches:
               only:
-              - develop
-              - devops
+                - develop
+                - devops
       - deploy_to_dev:
           requires:
             - push_to_dockerhub
-            filters:
-              branches:
-                only:
-                  - develop
-                  - devops
+          filters:
+            branches:
+              only:
+                - develop
+                - devops
       - deploy_to_stag:
           requires:
             - build_and_test
