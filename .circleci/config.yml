@@ -63,7 +63,7 @@ jobs:
       - run:
           name: Deploy to university virtual machine
           command: |
-            docker pull nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
+            docker-compose -f infrastructure/docker-compose.yml up -d
 
   deploy_to_stag:
     docker:

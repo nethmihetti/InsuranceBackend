@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  RESTserver:
+    image: nethmih/insurance_aggrgator_soramitsu:insuranceaggregatorbackend_${CIRCLE_SHA1}
+    ports:
+      - '8080:8080'
+    restart: always
+    environment:
+      DATASOURCE_URL: ${DATASOURCE_URL}
+      DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
+      DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
