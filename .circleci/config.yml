@@ -42,9 +42,9 @@ jobs:
       - SSH_HOST: "10.90.137.18"
     machine:
       enabled: true
-        - add_ssh_keys:
-            fingerprints:
-              - "1e:32:52:e6:5e:20:dc:65:27:ee:12:41:5b:d5:27:9d"
+    add_ssh_keys:
+      fingerprints:
+        - "1e:32:52:e6:5e:20:dc:65:27:ee:12:41:5b:d5:27:9d"
     steps:
       - checkout
       - run:
