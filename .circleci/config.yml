@@ -67,6 +67,7 @@ jobs:
       - run:
           name: Deploy to university virtual machine
           command: |
+            sudo apt-get install sshpass
             sshpass -p 1qaz2wsx@ ssh root@${SSH_HOST} "docker-compose -f infrastructure/docker-compose.yml up -d"
 
   deploy_to_stag:
