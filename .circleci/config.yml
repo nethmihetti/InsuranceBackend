@@ -39,8 +39,12 @@ jobs:
     environment:
       - DOCKER_PASSWORD: "N1qaz2wsx@"
       - PROJECT_ID: "insuranceaggregatorbackend"
+      - SSH_HOST: "10.90.137.18"
     machine:
       enabled: true
+        - add_ssh_keys:
+            fingerprints:
+              - "1e:32:52:e6:5e:20:dc:65:27:ee:12:41:5b:d5:27:9d"
     steps:
       - checkout
       - run:
@@ -54,13 +58,16 @@ jobs:
             docker tag ${PROJECT_ID} nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
             docker push nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
       - run:
+          name: fix host authenticity for production server
+          command: ssh-keyscan ${SSH_HOST} >> ~/.ssh/known_hosts
+      - run:
           name: Deploy to university virtual machine
           dependencies:
             pre:
-              - sudo apt-get update; sudo apt-get install sshpass
+              - sudo apt-get update
+              - sudo apt-get install sshpass
           command: |
-            sudo apt-get install sshpass
-            sshpass -p 1qaz2wsx@ ssh root@10.90.137.18 "docker pull nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}"
+            root@${SSH_HOST} "docker pull nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}"
 
   deploy_to_stag:
     docker:
