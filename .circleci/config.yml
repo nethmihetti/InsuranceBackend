@@ -62,8 +62,8 @@ jobs:
       enabled: true
     steps:
       - add_ssh_keys:
-        fingerprints:
-          - "1e:32:52:e6:5e:20:dc:65:27:ee:12:41:5b:d5:27:9d"
+          fingerprints:
+            - "1e:32:52:e6:5e:20:dc:65:27:ee:12:41:5b:d5:27:9d"
       - run:
           name: Deploy to university virtual machine
           command: |
