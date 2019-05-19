@@ -63,7 +63,7 @@ jobs:
       - run:
           name: Deploy to university virtual machine
           command: |
-            docker-compose -f infrastructure/docker-compose.yml up -d
+            ssh root@${SSH_HOST} "docker-compose -f infrastructure/docker-compose.yml up -d"
 
   deploy_to_stag:
     docker:
