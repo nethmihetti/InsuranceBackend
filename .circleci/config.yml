@@ -58,11 +58,9 @@ jobs:
             docker tag ${PROJECT_ID} nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
             docker push nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
       - run:
-          name: fix host authenticity for production server
-          command: ssh-keyscan ${SSH_HOST} >> ~/.ssh/known_hosts
-      - run:
           name: Deploy to university virtual machine
           command: |
+            ssh-keyscan ${SSH_HOST} >> ~/.ssh/known_hosts
             ssh root@${SSH_HOST} "docker-compose -f infrastructure/docker-compose.yml up -d"
 
   deploy_to_stag:
