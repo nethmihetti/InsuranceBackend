@@ -64,12 +64,11 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "1e:32:52:e6:5e:20:dc:65:27:ee:12:41:5b:d5:27:9d"
+            - "84:81:8b:77:37:14:9b:d4:ca:3a:53:76:23:5b:6e:c2"
       - run:
           name: Deploy to university virtual machine
           command: |
-            sudo apt-get install sshpass
-            sshpass -p 1qaz2wsx@ ssh root@${SSH_HOST} "docker-compose -f infrastructure/docker-compose.yml up -d"
+            ssh root@${SSH_HOST} "docker-compose -f infrastructure/docker-compose.yml up -d"
 
   deploy_to_stag:
     docker:
