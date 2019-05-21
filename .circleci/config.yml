@@ -62,13 +62,17 @@ jobs:
       enabled: true
     steps:
       - checkout
+      - run:
+          name: Fix ssh Could not resolve hostname
+          command: |
+            ssh-keyscan 10.90.137.18 >> ~/.ssh/known_hosts
       - add_ssh_keys:
           fingerprints:
             - "84:81:8b:77:37:14:9b:d4:ca:3a:53:76:23:5b:6e:c2"
       - run:
           name: Deploy to university virtual machine
           command: |
-            ssh -vvv root@${SSH_HOST} "docker-compose -f infrastructure/docker-compose.yml up -d"
+            ssh -vvv root@${SSH_HOST} 'docker-compose -f infrastructure/docker-compose.yml up -d'
 
   deploy_to_stag:
     docker:
