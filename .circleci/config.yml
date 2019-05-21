@@ -39,8 +39,8 @@ jobs:
     docker:
       - image: google/cloud-sdk
     environment:
-      - PROJECT_NAME: "InsuranceAggregatorBackEnd"
-      - GOOGLE_PROJECT_ID: "insuranceaggregatorbackend"
+      - PROJECT_NAME: "CentralizedBackend"
+      - GOOGLE_PROJECT_ID: "centralizedbackend"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
     steps:
@@ -71,14 +71,14 @@ jobs:
           command: |
             envsubst < infrastructure/k8s_dev.yml > ${HOME}/patched_k8s_dev.yml
             kubectl apply -f ${HOME}/patched_k8s_dev.yml
-            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}
+            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}-dev
 
   deploy_to_stag:
     docker:
       - image: google/cloud-sdk
     environment:
-      - PROJECT_NAME: "InsuranceAggregatorBackEnd"
-      - GOOGLE_PROJECT_ID: "insuranceaggregatorbackend"
+      - PROJECT_NAME: "CentralizedBackend"
+      - GOOGLE_PROJECT_ID: "centralizedbackend"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
     steps:
@@ -109,7 +109,7 @@ jobs:
           command: |
             envsubst < infrastructure/k8s_stag.yml > ${HOME}/patched_k8s_stag.yml
             kubectl apply -f ${HOME}/patched_k8s_stag.yml
-            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}
+            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}-stag
 
 workflows:
   version: 2
