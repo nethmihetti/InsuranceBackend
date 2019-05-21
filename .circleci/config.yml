@@ -39,8 +39,8 @@ jobs:
     docker:
       - image: google/cloud-sdk
     environment:
-      - PROJECT_NAME: "InsuranceAggregatorBackEnd"
-      - GOOGLE_PROJECT_ID: "insuranceaggregatorbackend"
+      - PROJECT_NAME: "CentralizedBackend"
+      - GOOGLE_PROJECT_ID: "centralizedbackend"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
     steps:
@@ -123,6 +123,7 @@ workflows:
             branches:
               only:
               - develop
+              - googlekubernates
       - deploy_to_stag:
           requires:
             - build_and_test

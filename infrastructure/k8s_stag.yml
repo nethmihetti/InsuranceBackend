@@ -18,7 +18,7 @@ metadata:
   labels:
     app: ${GOOGLE_PROJECT_ID}-stag
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: ${GOOGLE_PROJECT_ID}-stag
