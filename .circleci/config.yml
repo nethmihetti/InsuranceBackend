@@ -71,7 +71,7 @@ jobs:
           command: |
             envsubst < infrastructure/k8s_dev.yml > ${HOME}/patched_k8s_dev.yml
             kubectl apply -f ${HOME}/patched_k8s_dev.yml
-            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}
+            kubectl rollout status deployment/${GOOGLE_PROJECT_ID}-dev
 
   deploy_to_stag:
     docker:
