@@ -27,7 +27,7 @@ interface InsuranceRepository : JpaRepository<Insurance, Long> {
     fun insertNewInsuranceRequest(@Param("newRequest") newRequest: Insurance)
 
     @Transactional
-    fun findByCompanyCompanyid(@Param("companyId") companyId: Long): List<Insurance>
+    fun findByCompanyCompanyidOrderByInsurancerequestidDesc(@Param("companyId") companyId: Long): List<Insurance>
 
     @Transactional
     fun findByCompanyCompanyidAndStatus(@Param("companyId") companyId: Long,

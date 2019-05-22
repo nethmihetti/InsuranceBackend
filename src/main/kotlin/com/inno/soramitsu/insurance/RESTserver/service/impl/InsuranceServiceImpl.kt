@@ -103,7 +103,7 @@ class InsuranceServiceImpl : InsuranceService {
         if(!status.type.equals("all")) {
             return insuranceRepository.findByCompanyCompanyidAndStatus(companyId, status.type)
         }
-        return insuranceRepository.findByCompanyCompanyid(companyId)
+        return insuranceRepository.findByCompanyCompanyidOrderByInsurancerequestidDesc(companyId)
     }
 
     override fun updateInsuranceStatus(insuranceId: Long, status: InsuranceStatusType): Insurance {
