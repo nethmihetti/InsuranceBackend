@@ -64,8 +64,8 @@ jobs:
             docker build \
             --no-cache -f infrastructure/Dockerfile \
             -t ${GOOGLE_PROJECT_ID} .
-            docker tag ${PROJECT_ID} nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
-            docker push nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
+            docker tag ${GOOGLE_PROJECT_ID} nethmih/insurance_aggrgator_soramitsu:${GOOGLE_PROJECT_ID}_${CIRCLE_SHA1}
+            docker push nethmih/insurance_aggrgator_soramitsu:${GOOGLE_PROJECT_ID}_${CIRCLE_SHA1}
       - run:
           name: Deploy to Kubernetes
           command: |
