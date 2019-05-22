@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: ${GOOGLE_PROJECT_ID}-dev
-          image: eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
+          image: nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
           env:
             - name: DATASOURCE_URL
               value: ${DATASOURCE_URL}
