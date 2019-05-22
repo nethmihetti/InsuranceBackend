@@ -43,8 +43,6 @@ jobs:
       - GOOGLE_PROJECT_ID: "centralizedbackend"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
       - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
-      - DOCKER_PASSWORD: "N1qaz2wsx@"
-      - DOCKER_USER: "nethmih"
     steps:
       - checkout
       - run:
@@ -60,12 +58,12 @@ jobs:
       - run:
           name: Docker build and push
           command: |
-            echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USER} --password-stdin
+            echo ${DOCKER_PASS} | docker login --username ${DOCKER_USER} --password-stdin
             docker build \
             --no-cache -f infrastructure/Dockerfile \
             -t ${GOOGLE_PROJECT_ID} .
-            docker tag ${GOOGLE_PROJECT_ID} nethmih/insurance_aggrgator_soramitsu:${GOOGLE_PROJECT_ID}_${CIRCLE_SHA1}
-            docker push nethmih/insurance_aggrgator_soramitsu:${GOOGLE_PROJECT_ID}_${CIRCLE_SHA1}
+            docker tag ${GOOGLE_PROJECT_ID} ${DOCKER_USER}/${DOCKER_REPO}:${GOOGLE_PROJECT_ID}_${CIRCLE_SHA1}
+            docker push ${DOCKER_USER}/${DOCKER_REPO}:${GOOGLE_PROJECT_ID}_${CIRCLE_SHA1}
       - run:
           name: Deploy to Kubernetes
           command: |
@@ -96,14 +94,12 @@ jobs:
       - run:
           name: Docker build and push
           command: |
-            echo $DATASOURCE_URL
-            gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
+            echo ${DOCKER_PASS} | docker login --username ${DOCKER_USER} --password-stdin
             docker build \
-              --no-cache -f infrastructure/Dockerfile \
-              --build-arg COMMIT_REF=${CIRCLE_SHA1} \
-              -t ${GOOGLE_PROJECT_ID} .
-            docker tag ${GOOGLE_PROJECT_ID} eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
-            docker push eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
+            --no-cache -f infrastructure/Dockerfile \
+            -t ${GOOGLE_PROJECT_ID} .
+            docker tag ${GOOGLE_PROJECT_ID} ${DOCKER_USER}/${DOCKER_REPO}:${GOOGLE_PROJECT_ID}_${CIRCLE_SHA1}
+            docker push ${DOCKER_USER}/${DOCKER_REPO}:${GOOGLE_PROJECT_ID}_${CIRCLE_SHA1}
       - run:
           name: Deploy to Kubernetes
           command: |
