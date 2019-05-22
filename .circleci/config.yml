@@ -62,9 +62,8 @@ jobs:
           command: |
             echo ${DOCKER_PASSWORD} | docker login --username ${DOCKER_USER} --password-stdin
             docker build \
-              --no-cache -f infrastructure/Dockerfile \
-              --build-arg COMMIT_REF=${CIRCLE_SHA1} \
-              -t ${PROJECT_ID} .
+            --no-cache -f infrastructure/Dockerfile \
+            -t ${GOOGLE_PROJECT_ID} .
             docker tag ${PROJECT_ID} nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
             docker push nethmih/insurance_aggrgator_soramitsu:${PROJECT_ID}_${CIRCLE_SHA1}
       - run:
