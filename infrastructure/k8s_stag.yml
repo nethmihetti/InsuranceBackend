@@ -18,7 +18,7 @@ metadata:
   labels:
     app: ${GOOGLE_PROJECT_ID}-stag
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: ${GOOGLE_PROJECT_ID}-stag
@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: ${GOOGLE_PROJECT_ID}-stag
-          image: eu.gcr.io/${GOOGLE_PROJECT_ID}/backendrepo:${CIRCLE_SHA1}
+          image: ${DOCKER_USER}/${DOCKER_REPO}:${GOOGLE_PROJECT_ID}_${CIRCLE_SHA1}
           env:
             - name: DATASOURCE_URL
               value: ${DATASOURCE_URL}
