@@ -15,7 +15,7 @@ import javax.validation.constraints.NotBlank
 @Table(name = "user_data", schema = "main")
 @NoArgsConstructor
 @AllArgsConstructor
-data class User (
+data class Client (
 
         @Id
         @JsonIgnore
@@ -52,6 +52,10 @@ data class User (
         var passport_issued_by: String = "",
 
         @Column(name = "passport_issued_date")
-        var passport_issued_date: LocalDate
+        var passport_issued_date: LocalDate,
+
+        @OneToOne
+        @JoinColumn(name="insurance_user_id", nullable = false)
+        var insuranceuser: InsuranceUsers
 
 )

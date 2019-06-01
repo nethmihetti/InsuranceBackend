@@ -1,9 +1,8 @@
 package com.inno.soramitsu.insurance.RESTserver.dao
 
 import com.inno.soramitsu.insurance.RESTserver.model.Insurance
-import com.inno.soramitsu.insurance.RESTserver.model.InsuranceRequestBody
-import com.inno.soramitsu.insurance.RESTserver.model.InsuranceStatusType
-import com.inno.soramitsu.insurance.RESTserver.model.User
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
@@ -27,11 +26,11 @@ interface InsuranceRepository : JpaRepository<Insurance, Long> {
     fun insertNewInsuranceRequest(@Param("newRequest") newRequest: Insurance)
 
     @Transactional
-    fun findByCompanyCompanyidOrderByInsurancerequestidDesc(@Param("companyId") companyId: Long): List<Insurance>
+    fun findByCompanyCompanyidOrderByInsurancerequestidDesc(@Param("companyId") companyId: Long, @Param("page") page: Pageable): Page<Insurance>
 
     @Transactional
-    fun findByCompanyCompanyidAndStatus(@Param("companyId") companyId: Long,
-                                         @Param("status") status: String): List<Insurance>
+    fun findByCompanyCompanyidAndStatusOrderByInsurancerequestidDesc(@Param("companyId") companyId: Long,
+                                         @Param("status") status: String, @Param("page") page: Pageable): Page<Insurance>
 
     @Transactional
     @Modifying
@@ -39,7 +38,7 @@ interface InsuranceRepository : JpaRepository<Insurance, Long> {
     fun updateInsuranceStatus(@Param("insuranceId") insuranceId: Long, @Param("status") status: String)
 
     @Transactional
-    fun findByUserEmail(@Param("email") email: String): List<Insurance>
+    fun findByClientEmailOrderByInsurancerequestidDesc(@Param("email") email: String, @Param("page") page: Pageable): Page<Insurance>
 
     @Transactional
     @Query(value = "SELECT * FROM insurance_request ir WHERE ir.insurance_request_id=:#{#id} ", nativeQuery = true)

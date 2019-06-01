@@ -18,7 +18,8 @@ CREATE TABLE main.user_data(
  mobile_num VARCHAR (20) UNIQUE NOT NULL,
  passport_num VARCHAR (20) UNIQUE NOT NULL,
  passport_issued_by VARCHAR (150)  NOT NULL,
- passport_issued_date DATE NOT NULL DEFAULT CURRENT_DATE
+ passport_issued_date DATE NOT NULL DEFAULT CURRENT_DATE,
+ insurance_user_id serial NOT NULL REFERENCES main.insurance_users(insurance_user_id)
 );
 
 CREATE TABLE main.company_details(
@@ -40,14 +41,34 @@ CREATE TABLE main.insurance_request (
   company_id serial NOT NULL REFERENCES main.company_details(company_id)
 );
 
+CREATE TABLE main.insurance_users (
+ insurance_user_id serial PRIMARY KEY,
+ username VARCHAR(320) UNIQUE NOT NULL ,
+ password VARCHAR (400)  NOT NULL
+);
+
+CREATE TABLE main.insurance_agents (
+  agent_id serial PRIMARY KEY,
+  first_name VARCHAR (50) NULL,
+  middle_name VARCHAR (50) NULL,
+  last_name VARCHAR (50) NULL,
+  company_id serial NOT NULL REFERENCES main.company_details(company_id),
+  insurance_user_id serial NOT NULL REFERENCES main.insurance_users(insurance_user_id)
+);
+
 INSERT INTO main.address(house_num, apartment_num, street, city, state, country)
 VALUES
 ('123', 'Dorm3', '1,University st', 'Innopolis', 'Tatarstan', 'Russia');
 
 INSERT INTO main.user_data(first_name, middle_name, last_name, email, mobile_num, passport_num, passport_issued_by, passport_issued_date)
 VALUES
-('Nethmi', 'Thileka', 'Hettiarachchi', 'nethmihettiarachchi484@gmail.com', '+102284587584', '12ws34re', 'Sri Lanka', '2016-06-22');
+('Jon', 'Sansa', 'Snow', 'jonsnow@gmail.com', '+102284587584', '12ws34re', 'Winterfell', '2016-06-22');
 
 INSERT INTO main.company_details(company_name, address_id)
 VALUES
-('ABC Insurance', 1)
+('ABC Insurance', 1);
+
+INSERT INTO main.insurance_users(username, password)
+VALUES
+('nethmihettiarachchi484@gmail.com', 'qqqqqqqqq'),
+('jonsnow@gmail.com', 'qqqqqqqqq');

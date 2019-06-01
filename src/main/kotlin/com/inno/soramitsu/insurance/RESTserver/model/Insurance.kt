@@ -41,7 +41,7 @@ data class Insurance (
 
         @ManyToOne
         @JoinColumn(name="user_id", nullable = false)
-        var user: User,
+        var client: Client,
 
         @OneToOne
         @JoinColumn(name="company_id", nullable = false)
