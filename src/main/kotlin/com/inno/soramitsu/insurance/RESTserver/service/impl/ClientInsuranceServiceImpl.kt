@@ -1,17 +1,16 @@
 package com.inno.soramitsu.insurance.RESTserver.service.impl
 
-import com.inno.soramitsu.insurance.RESTserver.dao.AddressRepository
-import com.inno.soramitsu.insurance.RESTserver.dao.CompanyRepository
-import com.inno.soramitsu.insurance.RESTserver.dao.InsuranceRepository
-import com.inno.soramitsu.insurance.RESTserver.dao.UserRepository
+import com.inno.soramitsu.insurance.RESTserver.dao.*
 import com.inno.soramitsu.insurance.RESTserver.model.*
 import com.inno.soramitsu.insurance.RESTserver.service.ClientInsuranceService
 import com.inno.soramitsu.insurance.RESTserver.util.ServerUtil
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorCodes
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorMessages
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerExceptions
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import java.time.Instant
+import java.time.ZoneId
 import java.util.*
 import javax.transaction.Transactional
 
@@ -24,24 +23,32 @@ import javax.transaction.Transactional
 class ClientInsuranceServiceImpl(private val insuranceRepository: InsuranceRepository,
                                  private val addressRepository: AddressRepository,
                                  private val companyRepository: CompanyRepository,
-                                 private val userRepository: UserRepository) : ClientInsuranceService {
+                                 private val clientRepository: ClientRepository) : ClientInsuranceService {
 
-    override fun postNewUser(newUser: UserBody): User {
+    override fun updateClientDetails(updateUser: UserBody): Client {
 
-        val user = User(ServerUtil.generateRandomId(), newUser.firstName,
-                newUser.middleName, newUser.lastName, newUser.email, newUser.mobileNum,
-                newUser.passportNum, newUser.passportIssuedBy, ServerUtil.convertToLocalDate(newUser.passportIssuedDate))
+        val client = clientRepository.findByEmail(updateUser.email)
 
-        return userRepository.save(user)
+        client.first_name = updateUser.firstName
+        client.middle_name = updateUser.middleName
+        client.last_name = updateUser.lastName
+        client.mobile_num = updateUser.mobileNum
+        client.passport_num = updateUser.passportNum
+        client.passport_issued_by = updateUser.passportIssuedBy
+        client.passport_issued_date = updateUser.passportIssuedDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
+
+        return clientRepository.save(client)
 
     }
 
     override fun insertNewInsuranceRequest(insuranceRequestBody: InsuranceRequestBody): Insurance {
 
+        ServerUtil.validateInsuranceRequestDates(insuranceRequestBody.policyStartDate, insuranceRequestBody.policyEndDate)
+
         val newInsuranceRequest: Insurance
 
-        // find user by email
-        val user = userRepository.findByEmail(insuranceRequestBody.userEmail)
+        // find client by email
+        val user = clientRepository.findByEmail(insuranceRequestBody.userEmail)
 
         if(user.user_id > 0) {
 
@@ -83,7 +90,8 @@ class ClientInsuranceServiceImpl(private val insuranceRepository: InsuranceRepos
 
     }
 
-    override fun getInsuranceRequestsForClient(email: String): List<Insurance> {
-        return insuranceRepository.findByUserEmail(email)
+    override fun getInsuranceRequestsForClient(requestTO: RequestTO): Page<Insurance> {
+        return insuranceRepository.findByClientEmailOrderByInsurancerequestidDesc(requestTO.email,
+                ServerUtil.getPageSize(requestTO.page, requestTO.size))
     }
 }

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.inno.soramitsu.insurance.RESTserver.model.Agent
+import com.inno.soramitsu.insurance.RESTserver.model.InsuranceUsers
 import com.inno.soramitsu.insurance.RESTserver.security.Constants.SecurityConstants.EXPIRATION_TIME
 import com.inno.soramitsu.insurance.RESTserver.security.Constants.SecurityConstants.HEADER_STRING
 import com.inno.soramitsu.insurance.RESTserver.security.Constants.SecurityConstants.SECRET
@@ -38,7 +38,7 @@ class JWTAuthenticationFilter(authManager: AuthenticationManager): UsernamePassw
     override fun attemptAuthentication(req: HttpServletRequest, res: HttpServletResponse): Authentication {
 
         val creds = ObjectMapper()
-                .readValue(req.inputStream, Agent::class.java)
+                .readValue(req.inputStream, InsuranceUsers::class.java)
 
         return authenticationManager.authenticate(
                 UsernamePasswordAuthenticationToken(

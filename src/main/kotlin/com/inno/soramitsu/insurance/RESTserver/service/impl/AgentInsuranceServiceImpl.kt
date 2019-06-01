@@ -7,6 +7,7 @@ import com.inno.soramitsu.insurance.RESTserver.util.ServerUtil
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorCodes
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerErrorMessages
 import com.inno.soramitsu.insurance.RESTserver.util.exception.ServerExceptions
+import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
@@ -20,11 +21,13 @@ class AgentInsuranceServiceImpl(private val insuranceRepository: InsuranceReposi
                                 private val addressRepository: AddressRepository,
                                 private val companyRepository: CompanyRepository) : AgentInsuranceService {
 
-    override fun getInsuranceRequestsForCompany(companyId: Long, status: InsuranceStatusQueryType): List<Insurance> {
-        if(!status.type.equals("all")) {
-            return insuranceRepository.findByCompanyCompanyidAndStatus(companyId, status.type)
+    override fun getInsuranceRequestsForCompany(requestTO: RequestTO): Page<Insurance> {
+        if(!requestTO.status.type.equals("all")) {
+            return insuranceRepository.findByCompanyCompanyidAndStatusOrderByInsurancerequestidDesc(
+                    requestTO.companyId, requestTO.status.type, ServerUtil.getPageSize(requestTO.page, requestTO.size))
         }
-        return insuranceRepository.findByCompanyCompanyid(companyId)
+        return insuranceRepository.findByCompanyCompanyidOrderByInsurancerequestidDesc(requestTO.companyId,
+                ServerUtil.getPageSize(requestTO.page, requestTO.size))
     }
 
     override fun updateInsuranceStatus(insuranceId: Long, status: InsuranceStatusType): Insurance {

@@ -1,6 +1,7 @@
 package com.inno.soramitsu.insurance.RESTserver.service
 
 import com.inno.soramitsu.insurance.RESTserver.model.*
+import org.springframework.data.domain.Page
 
 /**
  * Created by nethmih on 17.03.19.
@@ -8,7 +9,7 @@ import com.inno.soramitsu.insurance.RESTserver.model.*
 
 interface AgentInsuranceService {
 
-    fun getInsuranceRequestsForCompany(companyId: Long, status: InsuranceStatusQueryType): List<Insurance>
+    fun getInsuranceRequestsForCompany(requestTO: RequestTO): Page<Insurance>
 
     fun updateInsuranceStatus(insuranceId: Long, status: InsuranceStatusType): Insurance
 

@@ -1,7 +1,6 @@
 package com.inno.soramitsu.insurance.RESTserver.controller
 
-import com.inno.soramitsu.insurance.RESTserver.model.Agent
-import com.inno.soramitsu.insurance.RESTserver.model.AgentSignUpRequestBody
+import com.inno.soramitsu.insurance.RESTserver.model.*
 import com.inno.soramitsu.insurance.RESTserver.model.envelope.EnvelopedResponse
 import com.inno.soramitsu.insurance.RESTserver.service.AuthenticationService
 import com.inno.soramitsu.insurance.RESTserver.util.ResponseUtil
@@ -20,16 +19,28 @@ import org.springframework.web.bind.annotation.*
 class AuthenticationController(private val authenticationService: AuthenticationService,
                                private val bCryptPasswordEncoder: BCryptPasswordEncoder) {
 
-    @PostMapping("/signUp")
-    fun postNewAgent(@RequestBody agentSignUpRequestBody: AgentSignUpRequestBody): ResponseEntity<EnvelopedResponse<Any>> {
+    @PostMapping("/signUp/agent/{companyId}")
+    fun postNewAgent(@RequestBody agentSignUpRequestBody: SignUpRequestBody,
+                     @PathVariable("companyId") companyId: Int): ResponseEntity<EnvelopedResponse<Any>> {
 
         agentSignUpRequestBody.password = bCryptPasswordEncoder.encode(agentSignUpRequestBody.password)
 
-        val agent: Agent = authenticationService.postNewAgent(agentSignUpRequestBody)
+        val agent: Agent = authenticationService.postNewAgent(agentSignUpRequestBody, companyId)
 
         val envelopedResponse: EnvelopedResponse<Any> = ResponseUtil.generateResponse(agent)
 
         return ResponseEntity(envelopedResponse, HttpStatus.CREATED)
+    }
 
+    @PostMapping("/signUp/client")
+    fun postNewClient(@RequestBody clientSignUpRequestBody: SignUpRequestBody): ResponseEntity<EnvelopedResponse<Any>> {
+
+        clientSignUpRequestBody.password = bCryptPasswordEncoder.encode(clientSignUpRequestBody.password)
+
+        val client: Client = authenticationService.postNewClient(clientSignUpRequestBody)
+
+        val envelopedResponse: EnvelopedResponse<Any> = ResponseUtil.generateResponse(client)
+
+        return ResponseEntity(envelopedResponse, HttpStatus.CREATED)
     }
 }

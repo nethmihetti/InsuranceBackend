@@ -47,8 +47,9 @@ open class WebSecurity(@Qualifier("UserDetailsService") private val userDetailsS
                 "/swagger-resources/**",
                 "/configuration/security",
                 "/swagger-ui.html/**",
-                "/api/V1/clients/**",
-                "/api/V1/signUp",
+                "/api/V1/signUp/**",
                 "/webjars/**")
     }
 }
+
+//"/api/V1/clients/**",

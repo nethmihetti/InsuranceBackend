@@ -6,6 +6,9 @@ import com.inno.soramitsu.insurance.RESTserver.service.AgentInsuranceService
 import com.inno.soramitsu.insurance.RESTserver.service.AuthenticationService
 import com.inno.soramitsu.insurance.RESTserver.service.impl.AuthenticationServiceImpl
 import com.inno.soramitsu.insurance.RESTserver.util.ResponseUtil
+import io.swagger.annotations.ApiParam
+import org.springframework.data.domain.Page
+import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -46,12 +49,22 @@ class AgentController(private val agentInsuranceService: AgentInsuranceService) 
     }
 
     @GetMapping("/requests")
-    fun getInsuranceRequests(@RequestParam companyId: Long, @RequestParam status: InsuranceStatusQueryType)
-            : ResponseEntity<EnvelopedResponse<Any>> {
+    fun getInsuranceRequests(@RequestParam companyId: Long, @RequestParam status: InsuranceStatusQueryType,
+                             @RequestParam(value = "page", required = false) page: Int?,
+                             @RequestParam(value = "size", required = false) size: Int?)
+            : ResponseEntity<EnvelopedResponse<*>> {
 
-        val requests: List<Insurance> = agentInsuranceService.getInsuranceRequestsForCompany(companyId, status)
+        val requestTO = RequestTO
+        requestTO.companyId = companyId
+        requestTO.status = status
+        requestTO.size = size
+        requestTO.page = page
+
+        val requests: Page<Insurance> = agentInsuranceService.getInsuranceRequestsForCompany(requestTO)
 
         val envelopedResponse: EnvelopedResponse<Any>  = ResponseUtil.generateResponse(requests)
+
+        ResponseUtil.generateGetAllInsuranceRequestsLinks(requestTO, envelopedResponse)
 
         return ResponseEntity(envelopedResponse, HttpStatus.OK)
     }

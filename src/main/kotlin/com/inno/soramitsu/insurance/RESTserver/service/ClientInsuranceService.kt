@@ -1,9 +1,7 @@
 package com.inno.soramitsu.insurance.RESTserver.service
 
-import com.inno.soramitsu.insurance.RESTserver.model.Insurance
-import com.inno.soramitsu.insurance.RESTserver.model.InsuranceRequestBody
-import com.inno.soramitsu.insurance.RESTserver.model.User
-import com.inno.soramitsu.insurance.RESTserver.model.UserBody
+import com.inno.soramitsu.insurance.RESTserver.model.*
+import org.springframework.data.domain.Page
 
 /**
  * Created by nethmih on 16.05.19.
@@ -11,9 +9,9 @@ import com.inno.soramitsu.insurance.RESTserver.model.UserBody
 
 interface ClientInsuranceService {
 
-    fun postNewUser(newUser: UserBody) : User
+    fun updateClientDetails(updateUser: UserBody): Client
 
     fun insertNewInsuranceRequest(insuranceRequestBody: InsuranceRequestBody): Insurance
 
-    fun getInsuranceRequestsForClient(email: String): List<Insurance>
+    fun getInsuranceRequestsForClient(requestTO: RequestTO): Page<Insurance>
 }
