@@ -33,13 +33,13 @@ class WebSecurity(@Qualifier("UserDetailsService") private val userDetailsServic
     }
 
     override fun configure(http: HttpSecurity) {
-        /*http.csrf().disable().authorizeRequests()
+        http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL_AGENT).permitAll()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL_CLIENT).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(JWTAuthorizationFilter(authenticationManager()))*/
+                .addFilter(JWTAuthorizationFilter(authenticationManager()))
 
         http.cors()
     }
@@ -63,7 +63,8 @@ class WebSecurity(@Qualifier("UserDetailsService") private val userDetailsServic
         val configuration = CorsConfiguration()
         configuration.allowedOrigins = ImmutableList.of("*")
         configuration.allowedMethods = ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
-        configuration.allowedHeaders = ImmutableList.of("Authorization", "Cache-Control", "Content-Type")
+        configuration.allowedHeaders = ImmutableList.of("Content-Language", "Cache-Control", "Content-Type", "Expires")
+        configuration.exposedHeaders = ImmutableList.of("Authorization")
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
