@@ -33,13 +33,13 @@ class WebSecurity(@Qualifier("UserDetailsService") private val userDetailsServic
     }
 
     override fun configure(http: HttpSecurity) {
-        http.csrf().disable().authorizeRequests()
+        /*http.csrf().disable().authorizeRequests()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL_AGENT).permitAll()
                 .antMatchers(HttpMethod.POST, SIGN_UP_URL_CLIENT).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(JWTAuthorizationFilter(authenticationManager()))
+                .addFilter(JWTAuthorizationFilter(authenticationManager()))*/
 
         http.cors()
     }
