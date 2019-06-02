@@ -1,7 +1,8 @@
 package com.inno.soramitsu.insurance.RESTserver.security
 
-import com.inno.soramitsu.insurance.RESTserver.security.Constants.SecurityConstants.SIGN_UP_URL
-import org.springframework.beans.factory.annotation.Autowired
+import com.google.common.collect.ImmutableList
+import com.inno.soramitsu.insurance.RESTserver.security.Constants.SecurityConstants.SIGN_UP_URL_AGENT
+import com.inno.soramitsu.insurance.RESTserver.security.Constants.SecurityConstants.SIGN_UP_URL_CLIENT
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -13,6 +14,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 /**
  * Created by nethmih on 16.05.19.
@@ -20,7 +24,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 
 @Configuration
 @EnableWebSecurity
-open class WebSecurity(@Qualifier("UserDetailsService") private val userDetailsService: UserDetailsService):
+class WebSecurity(@Qualifier("UserDetailsService") private val userDetailsService: UserDetailsService):
         WebSecurityConfigurerAdapter() {
 
     @Bean
@@ -30,11 +34,14 @@ open class WebSecurity(@Qualifier("UserDetailsService") private val userDetailsS
 
     override fun configure(http: HttpSecurity) {
         http.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, SIGN_UP_URL).permitAll()
+                .antMatchers(HttpMethod.POST, SIGN_UP_URL_AGENT).permitAll()
+                .antMatchers(HttpMethod.POST, SIGN_UP_URL_CLIENT).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(JWTAuthenticationFilter(authenticationManager()))
                 .addFilter(JWTAuthorizationFilter(authenticationManager()))
+
+        http.cors()
     }
 
     override fun configure(auth: AuthenticationManagerBuilder?) {
@@ -50,6 +57,17 @@ open class WebSecurity(@Qualifier("UserDetailsService") private val userDetailsS
                 "/api/V1/signUp/**",
                 "/webjars/**")
     }
+
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = ImmutableList.of("*")
+        configuration.allowedMethods = ImmutableList.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH")
+        configuration.allowedHeaders = ImmutableList.of("Authorization", "Cache-Control", "Content-Type")
+
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
+    }
 }
 
-//"/api/V1/clients/**",
