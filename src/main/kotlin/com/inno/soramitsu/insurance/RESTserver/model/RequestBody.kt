@@ -65,3 +65,9 @@ class SignUpRequestBody(
     var username: String,
     var password: String
 )
+
+class InsuranceClaimBody(
+    var policyId: Long,
+    var description: String = "",
+    var claimDate: Date
+)

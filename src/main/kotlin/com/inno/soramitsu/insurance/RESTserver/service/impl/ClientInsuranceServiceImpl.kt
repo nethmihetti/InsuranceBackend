@@ -23,7 +23,8 @@ import javax.transaction.Transactional
 class ClientInsuranceServiceImpl(private val insuranceRepository: InsuranceRepository,
                                  private val addressRepository: AddressRepository,
                                  private val companyRepository: CompanyRepository,
-                                 private val clientRepository: ClientRepository) : ClientInsuranceService {
+                                 private val clientRepository: ClientRepository,
+                                 private val claimRepository: ClaimRepository) : ClientInsuranceService {
 
     override fun updateClientDetails(updateUser: UserBody): Client {
 
@@ -93,5 +94,21 @@ class ClientInsuranceServiceImpl(private val insuranceRepository: InsuranceRepos
     override fun getInsuranceRequestsForClient(requestTO: RequestTO): Page<Insurance> {
         return insuranceRepository.findByClientEmailOrderByInsurancerequestidDesc(requestTO.email,
                 ServerUtil.getPageSize(requestTO.page, requestTO.size))
+    }
+
+    override fun insertNewInsuranceClaim(claimBody: InsuranceClaimBody): InsuranceClaim {
+        val insurancePolicy  = insuranceRepository.findByInsuranceRequestId(claimBody.policyId)
+
+        if(insurancePolicy.insurancerequestid > 0) {
+
+            val claim = InsuranceClaim(ServerUtil.generateRandomId(),
+                    claimBody.description, ServerUtil.convertToLocalDate(claimBody.claimDate),
+                    InsuranceStatusType.PENDING.type, insurancePolicy)
+
+            return claimRepository.save(claim)
+        }
+
+        throw ServerExceptions(ServerErrorMessages.INVALID_PARAM_ERROR, ServerErrorCodes.TYPE_INVALID,
+                "please make sure insurance policy exist")
     }
 }

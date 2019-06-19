@@ -19,15 +19,20 @@ import javax.transaction.Transactional
 @Transactional
 class AgentInsuranceServiceImpl(private val insuranceRepository: InsuranceRepository,
                                 private val addressRepository: AddressRepository,
-                                private val companyRepository: CompanyRepository) : AgentInsuranceService {
+                                private val companyRepository: CompanyRepository,
+                                private val claimRepository: ClaimRepository) : AgentInsuranceService {
 
     override fun getInsuranceRequestsForCompany(requestTO: RequestTO): Page<Insurance> {
-        if(!requestTO.status.type.equals("all")) {
-            return insuranceRepository.findByCompanyCompanyidAndStatusOrderByInsurancerequestidDesc(
-                    requestTO.companyId, requestTO.status.type, ServerUtil.getPageSize(requestTO.page, requestTO.size))
+
+        return if(requestTO.status.any{ status -> status.type == "all"}) {
+            insuranceRepository.findByCompanyCompanyidOrderByInsurancerequestidDesc(requestTO.companyId,
+                    ServerUtil.getPageSize(requestTO.page, requestTO.size))
+        } else {
+            val statusList: MutableList<String> = mutableListOf()
+            requestTO.status.forEach{status -> statusList.add(status.type)}
+            insuranceRepository.findByCompanyCompanyidAndStatusInOrderByInsurancerequestidDesc(
+                    requestTO.companyId, statusList, ServerUtil.getPageSize(requestTO.page, requestTO.size))
         }
-        return insuranceRepository.findByCompanyCompanyidOrderByInsurancerequestidDesc(requestTO.companyId,
-                ServerUtil.getPageSize(requestTO.page, requestTO.size))
     }
 
     override fun updateInsuranceStatus(insuranceId: Long, status: InsuranceStatusType): Insurance {
@@ -54,6 +59,18 @@ class AgentInsuranceServiceImpl(private val insuranceRepository: InsuranceReposi
 
         throw ServerExceptions(ServerErrorMessages.NULL_RESPONSE_FROM_DATABASE, ServerErrorCodes.TYPE_INVALID,
                 "error inserting the company address or company details")
+    }
+
+    override fun getInsuranceClaimsForCompany(requestTO: RequestTO): Page<InsuranceClaim> {
+        return if(requestTO.status.any{ status -> status.type == "all"}) {
+            claimRepository.findByInsuranceCompanyCompanyidOrderByClaimedDateDesc(requestTO.companyId,
+                    ServerUtil.getPageSize(requestTO.page, requestTO.size))
+        } else {
+            val statusList: MutableList<String> = mutableListOf()
+            requestTO.status.forEach{status -> statusList.add(status.type)}
+            claimRepository.findByInsuranceCompanyCompanyidAndStatusInOrderByClaimedDateDesc(
+                    requestTO.companyId, statusList, ServerUtil.getPageSize(requestTO.page, requestTO.size))
+        }
     }
 
 }

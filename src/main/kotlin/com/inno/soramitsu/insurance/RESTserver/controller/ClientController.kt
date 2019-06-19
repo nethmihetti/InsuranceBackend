@@ -44,7 +44,7 @@ class ClientController(private val clientInsuranceService: ClientInsuranceServic
     @GetMapping("/requests")
     fun getInsuranceRequestForClient(@RequestParam email: String,
                                      @RequestParam(value = "page", required = false) page: Int?,
-                                     @RequestParam(value = "size", required = false) size: Int? )
+                                     @RequestParam(value = "size", required = false) size: Int?)
             : ResponseEntity<EnvelopedResponse<Any>> {
 
         val requestTO = RequestTO
@@ -58,6 +58,17 @@ class ClientController(private val clientInsuranceService: ClientInsuranceServic
         ResponseUtil.generateGetAllInsuranceRequestsLinksForClient(requestTO, envelopedResponse)
 
         return ResponseEntity(envelopedResponse, HttpStatus.OK)
+
+    }
+
+    @PostMapping("/claims")
+    fun postInsuranceClaim(@RequestBody claimBody: InsuranceClaimBody): ResponseEntity<EnvelopedResponse<Any>> {
+
+        val claim: InsuranceClaim = clientInsuranceService.insertNewInsuranceClaim(claimBody)
+
+        val envelopedResponse: EnvelopedResponse<Any> = ResponseUtil.generateResponse(claim)
+
+        return ResponseEntity(envelopedResponse, HttpStatus.CREATED)
 
     }
 

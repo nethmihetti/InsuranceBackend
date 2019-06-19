@@ -29,8 +29,8 @@ interface InsuranceRepository : JpaRepository<Insurance, Long> {
     fun findByCompanyCompanyidOrderByInsurancerequestidDesc(@Param("companyId") companyId: Long, @Param("page") page: Pageable): Page<Insurance>
 
     @Transactional
-    fun findByCompanyCompanyidAndStatusOrderByInsurancerequestidDesc(@Param("companyId") companyId: Long,
-                                         @Param("status") status: String, @Param("page") page: Pageable): Page<Insurance>
+    fun findByCompanyCompanyidAndStatusInOrderByInsurancerequestidDesc(@Param("companyId") companyId: Long,
+                                         @Param("status") status: List<String>, @Param("page") page: Pageable): Page<Insurance>
 
     @Transactional
     @Modifying
