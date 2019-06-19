@@ -14,4 +14,6 @@ interface ClientInsuranceService {
     fun insertNewInsuranceRequest(insuranceRequestBody: InsuranceRequestBody): Insurance
 
     fun getInsuranceRequestsForClient(requestTO: RequestTO): Page<Insurance>
+
+    fun insertNewInsuranceClaim(claimBody: InsuranceClaimBody): InsuranceClaim
 }

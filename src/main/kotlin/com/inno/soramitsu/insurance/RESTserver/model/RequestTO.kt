@@ -6,7 +6,7 @@ package com.inno.soramitsu.insurance.RESTserver.model
 
 object RequestTO {
     var companyId: Long = 1L
-    lateinit var status: InsuranceStatusQueryType
+    lateinit var status: List<InsuranceStatusQueryType>
     var email: String = ""
     var page: Int? = null
     var size: Int? = null

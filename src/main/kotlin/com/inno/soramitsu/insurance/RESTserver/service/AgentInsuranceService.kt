@@ -15,6 +15,8 @@ interface AgentInsuranceService {
 
     fun insertNewCompany(companyRequestBody: CompanyRequestBody): Company
 
+    fun getInsuranceClaimsForCompany(requestTO: RequestTO): Page<InsuranceClaim>
+
    // fun postNewAgent(agentSignUpRequestBody: AgentSignUpRequestBody) : Agent
 
 }

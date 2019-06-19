@@ -56,6 +56,14 @@ CREATE TABLE main.insurance_agents (
   insurance_user_id serial NOT NULL REFERENCES main.insurance_users(insurance_user_id)
 );
 
+CREATE TABLE main.insurance_claims (
+  claim_id serial PRIMARY KEY,
+  description VARCHAR (500) NULL,
+  claimed_date DATE NOT NULL DEFAULT CURRENT_DATE,
+  status VARCHAR (20) NOT NULL DEFAULT 'pending',
+  insurance_request_id serial NOT NULL REFERENCES main.insurance_request(insurance_request_id)
+);
+
 INSERT INTO main.address(house_num, apartment_num, street, city, state, country)
 VALUES
 ('123', 'Dorm3', '1,University st', 'Innopolis', 'Tatarstan', 'Russia');
