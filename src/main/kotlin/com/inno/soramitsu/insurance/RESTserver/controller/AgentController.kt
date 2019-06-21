@@ -83,4 +83,16 @@ class AgentController(private val agentInsuranceService: AgentInsuranceService) 
 
         return ResponseEntity(envelopedResponse, HttpStatus.OK)
     }
+
+    @PatchMapping("/claims")
+    fun updateInsuranceClaimStatus(@RequestParam claimId: Long, @RequestParam status: InsuranceStatusType) :
+            ResponseEntity<EnvelopedResponse<Any>> {
+
+        val claim = agentInsuranceService.updateInsuranceClaimStatus(claimId, status)
+
+        val envelopedResponse: EnvelopedResponse<Any>  = ResponseUtil.generateResponse(claim)
+
+        return ResponseEntity(envelopedResponse, HttpStatus.ACCEPTED)
+
+    }
 }

@@ -73,4 +73,10 @@ class AgentInsuranceServiceImpl(private val insuranceRepository: InsuranceReposi
         }
     }
 
+    override fun updateInsuranceClaimStatus(claimId: Long, status: InsuranceStatusType): InsuranceClaim {
+        claimRepository.updateInsuranceClaimStatus(claimId , status.type)
+
+        return claimRepository.findByClaimid(claimId)
+    }
+
 }
