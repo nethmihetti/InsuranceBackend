@@ -17,6 +17,8 @@ interface AgentInsuranceService {
 
     fun getInsuranceClaimsForCompany(requestTO: RequestTO): Page<InsuranceClaim>
 
+    fun updateInsuranceClaimStatus(claimId: Long, status: InsuranceStatusType): InsuranceClaim
+
    // fun postNewAgent(agentSignUpRequestBody: AgentSignUpRequestBody) : Agent
 
 }
