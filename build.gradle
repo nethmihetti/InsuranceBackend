@@ -40,8 +40,6 @@ dependencies {
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 	implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testCompile group: 'junit', name: 'junit', version: '4.12'
 
 	// JPA Data (We are going to use Repositories, Entities, Hibernate, etc...)
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -69,6 +67,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
 	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.junit.jupiter:junit-jupiter-api")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
 }
 
@@ -79,14 +80,25 @@ compileKotlin {
 	}
 }
 
+/*
+tasks.withType<Test> {
+	useJUnitPlatform()
+}
+*/
+
 jacoco {
 	toolVersion = jacocoVersion
+	//reportsDir = file("$buildDir/customJacocoReportDir")
 }
 
 jacocoTestReport {
 	reports {
-		html.enabled = true
-		xml.enabled = true
-		csv.enabled = true
+		xml.enabled false
+		csv.enabled false
+		//html.destination "${buildDir}/jacocoHtml"
 	}
 }
+
+/*jacoco {
+	reportsDir = file("build/tmp/jacoco.exec")
+}*/
