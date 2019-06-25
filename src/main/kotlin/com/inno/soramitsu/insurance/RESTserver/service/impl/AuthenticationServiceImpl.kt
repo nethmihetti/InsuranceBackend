@@ -52,7 +52,8 @@ class AuthenticationServiceImpl(private val agentRepository: AgentRepository,
         val newUser = insuranceUsersRepository.save(insuranceUser)
 
         val newClient = Client(ServerUtil.generateRandomId(), "N/A", "N/A", "N/A",
-                clientSignUpRequestBody.username, "N/A", "N/A", "N/A", LocalDate.now(), newUser)
+                clientSignUpRequestBody.username, ServerUtil.generateRandomId().toString(),
+                ServerUtil.generateRandomId().toString(), "N/A", LocalDate.now(), newUser)
 
         return clientRepository.save(newClient)
     }

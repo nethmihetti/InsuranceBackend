@@ -111,4 +111,13 @@ class ClientInsuranceServiceImpl(private val insuranceRepository: InsuranceRepos
         throw ServerExceptions(ServerErrorMessages.INVALID_PARAM_ERROR, ServerErrorCodes.TYPE_INVALID,
                 "please make sure insurance policy exist")
     }
+
+    override fun getInsuranceClaimsForClient(requestTO: RequestTO): Page<InsuranceClaim> {
+        return claimRepository.findByInsuranceClientEmailOrderByClaimedDateDesc(requestTO.email,
+                ServerUtil.getPageSize(requestTO.page, requestTO.size))
+    }
+
+    override fun getAllCompanyDetails(): List<Company> {
+        return companyRepository.findAll()
+    }
 }
