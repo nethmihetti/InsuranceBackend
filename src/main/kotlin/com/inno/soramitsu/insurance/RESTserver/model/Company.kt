@@ -19,6 +19,12 @@ data class Company (
         @Column(name = "company_name")
         var companyname: String = "",
 
+        @Column(name = "description")
+        var description: String = "",
+
+        @Column(name = "image_url")
+        var image_url: String = "",
+
         @OneToOne
         @JoinColumn(name="address_id", nullable = false)
         var address: UserAddress

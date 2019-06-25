@@ -33,4 +33,8 @@ interface ClaimRepository : JpaRepository<InsuranceClaim, Long> {
     @Transactional
     fun findByClaimid(@Param("claimid") claimid: Long): InsuranceClaim
 
+    @Transactional
+    fun findByInsuranceClientEmailOrderByClaimedDateDesc(@Param("email") email: String,
+                                                         @Param("page") page: Pageable): Page<InsuranceClaim>
+
 }

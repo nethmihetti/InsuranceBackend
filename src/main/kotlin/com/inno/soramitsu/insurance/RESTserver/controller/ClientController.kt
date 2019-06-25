@@ -72,6 +72,36 @@ class ClientController(private val clientInsuranceService: ClientInsuranceServic
 
     }
 
+    @GetMapping("/claims")
+    fun getInsuranceClaimsForClient(@RequestParam email: String,
+                                     @RequestParam(value = "page", required = false) page: Int?,
+                                     @RequestParam(value = "size", required = false) size: Int?)
+            : ResponseEntity<EnvelopedResponse<Any>> {
+
+        val requestTO = RequestTO
+        requestTO.email = email
+        requestTO.size = size
+        requestTO.page = page
+
+        val claims: Page<InsuranceClaim> = clientInsuranceService.getInsuranceClaimsForClient(requestTO)
+        val envelopedResponse: EnvelopedResponse<Any> = ResponseUtil.generateResponse(claims)
+
+        ResponseUtil.generateGetAllInsuranceRequestsLinksForClient(requestTO, envelopedResponse)
+
+        return ResponseEntity(envelopedResponse, HttpStatus.OK)
+
+    }
+
+    @GetMapping("/companies")
+    fun getAllCompanyDetails(): ResponseEntity<EnvelopedResponse<Any>>{
+
+        val companies: List<Company> = clientInsuranceService.getAllCompanyDetails()
+
+        val envelopedResponse: EnvelopedResponse<Any> = ResponseUtil.generateResponse(companies)
+
+        return ResponseEntity(envelopedResponse, HttpStatus.OK)
+    }
+
 }
 
 
