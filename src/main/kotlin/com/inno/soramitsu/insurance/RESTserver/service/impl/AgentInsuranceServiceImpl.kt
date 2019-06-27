@@ -53,7 +53,8 @@ class AgentInsuranceServiceImpl(private val insuranceRepository: InsuranceReposi
 
         if(addressSaved.address_id > 0) {
             //post the new company
-            val newCompany = Company(ServerUtil.generateRandomId(), companyRequestBody.companyName, addressSaved)
+            val newCompany = Company(ServerUtil.generateRandomId(), companyRequestBody.companyName,
+                    companyRequestBody.description, companyRequestBody.imageURL, addressSaved)
             return companyRepository.save(newCompany)
         }
 

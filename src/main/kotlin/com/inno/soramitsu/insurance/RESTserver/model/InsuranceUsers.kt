@@ -19,7 +19,7 @@ data class InsuranceUsers (
         @Column(name = "username")
         var username: String = "",
 
-        @JsonIgnore
+        //@JsonIgnore
         @Column(name = "password")
         var password: String = ""
 

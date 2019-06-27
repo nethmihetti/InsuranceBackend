@@ -25,7 +25,9 @@ CREATE TABLE main.user_data(
 CREATE TABLE main.company_details(
   company_id serial PRIMARY KEY,
   company_name VARCHAR(200) NOT NULL,
-  address_id serial NOT NULL REFERENCES main.address(address_id)
+  address_id serial NOT NULL REFERENCES main.address(address_id),
+  description VARCHAR(500),
+  image_url VARCHAR(500)
 );
 
 CREATE TABLE main.insurance_request (

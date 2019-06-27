@@ -16,4 +16,8 @@ interface ClientInsuranceService {
     fun getInsuranceRequestsForClient(requestTO: RequestTO): Page<Insurance>
 
     fun insertNewInsuranceClaim(claimBody: InsuranceClaimBody): InsuranceClaim
+
+    fun getInsuranceClaimsForClient(requestTO: RequestTO): Page<InsuranceClaim>
+
+    fun getAllCompanyDetails(): List<Company>
 }

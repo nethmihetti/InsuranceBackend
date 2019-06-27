@@ -58,6 +58,8 @@ class InsuranceRequestBody (
 
 class CompanyRequestBody(
     var companyName: String ="",
+    var description: String = "",
+    var imageURL: String="",
     var address: AddressBody
 )
 
