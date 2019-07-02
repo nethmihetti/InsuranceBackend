@@ -1,7 +1,7 @@
 package com.inno.soramitsu.insurance.RESTserver.controller
 
 import com.inno.soramitsu.insurance.RESTserver.model.*
-import com.inno.soramitsu.insurance.RESTserver.service.ClientInsuranceService
+import com.inno.soramitsu.insurance.RESTserver.service.AgentInsuranceService
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Before
@@ -16,8 +16,6 @@ import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import java.time.LocalDate
-import java.util.*
-
 
 /**
  * Created by nethmih on 04.04.19.
@@ -26,12 +24,12 @@ import java.util.*
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(MockitoJUnitRunner::class)
-class ClientControllerTest {
+class AgentControllerTest {
 
-    private lateinit var clientController: ClientController
+    private lateinit var agentController: AgentController
 
     @Mock
-    private lateinit var clientInsuranceService: ClientInsuranceService
+    private lateinit var agentInsuranceService: AgentInsuranceService
 
     private lateinit var address: UserAddress
 
@@ -49,7 +47,7 @@ class ClientControllerTest {
 
     @Before
     fun setup() {
-        clientController = ClientController(clientInsuranceService)
+        agentController = AgentController(agentInsuranceService)
 
         address = UserAddress(1, "123", "Dorm3", "1,University st", "Innopolis", "Tatarstan", "Russia")
         mockCompany = Company(1, "ABC Insurance", "some description", "some url", address)
@@ -60,41 +58,36 @@ class ClientControllerTest {
         insuranceMock = Insurance(12, "some title", 1000.00, LocalDate.parse("2018-12-31"),
                 LocalDate.parse("2018-12-31"), LocalDate.parse("2018-12-31"), "pending", address, mockClient, mockCompany)
 
-        claimMock = InsuranceClaim(3, "some description", LocalDate.now(), "PENDING", insuranceMock )
+        claimMock = InsuranceClaim(3, "some description", LocalDate.now(), "PENDING", insuranceMock)
 
         addressBody = AddressBody("12", "33", "some street", "this city", "that state", "obvious")
     }
 
     @Test
-    fun testUpdateClientDetails() {
-        val userBody = UserBody("jon", "bastered", "snow", "jonsnow@gmail.com",
-                "02145555", "11112", "Winterfell", Date())
+    fun testInsertNewCompany() {
+        val companyRequestBody = CompanyRequestBody("New Company", "this is the description", "https://someurl", addressBody)
+        given(agentInsuranceService.insertNewCompany(companyRequestBody)).willReturn(mockCompany)
 
-        given(clientInsuranceService.updateClientDetails(userBody)).willReturn(mockClient)
+        val response = agentController.insertNewCompany(companyRequestBody)
 
-        val response = clientController.updateClientDetails(userBody)
+        assertNotNull(response)
+        assertEquals(HttpStatus.CREATED, response.statusCode)
+    }
+
+    @Test
+    fun testUpdateInsuranceStatus() {
+        val status = InsuranceStatusType.ACCEPTED
+        given(agentInsuranceService.updateInsuranceStatus(2, status)).willReturn(insuranceMock)
+
+        val response = agentController.updateInsuranceStatus(2, status)
 
         assertNotNull(response)
         assertEquals(HttpStatus.ACCEPTED, response.statusCode)
     }
 
     @Test
-    fun testPostInsuranceRequest() {
+    fun testGetInsuranceRequests() {
 
-        val insuranceRequestBody = InsuranceRequestBody("jonsnow@gmail.com", "Vehicle", "1000", Date(), Date(), addressBody, 1 )
-
-        given(clientInsuranceService.insertNewInsuranceRequest(insuranceRequestBody)).willReturn(insuranceMock)
-
-        val response = clientController.postInsuranceRequest(insuranceRequestBody)
-
-        assertNotNull(response)
-        assertEquals(HttpStatus.CREATED, response.statusCode)
-
-    }
-
-
-    @Test
-    fun testGetInsuranceRequestForClient() {
         val insuranceRequests = listOf(insuranceMock)
 
         val pagedInsuranceRequests: Page<Insurance> = PageImpl<Insurance>(insuranceRequests, PageRequest(0, 10), insuranceRequests.size.toLong())
@@ -106,9 +99,9 @@ class ClientControllerTest {
         requestTO.size = 10
         requestTO.status = listOf(InsuranceStatusQueryType.ACCEPTED)
 
-        given(clientInsuranceService.getInsuranceRequestsForClient(requestTO)).willReturn(pagedInsuranceRequests)
+        given(agentInsuranceService.getInsuranceRequestsForCompany(requestTO)).willReturn(pagedInsuranceRequests)
 
-        val response = clientController.getInsuranceRequestForClient("jonsnow@gmail.com", 0, 10)
+        val response = agentController.getInsuranceRequests(1, listOf(InsuranceStatusQueryType.ACCEPTED), 1, 10)
 
         assertNotNull(response)
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -116,21 +109,8 @@ class ClientControllerTest {
     }
 
     @Test
-    fun testPostInsuranceClaim() {
+    fun testGetInsuranceClaims() {
 
-        val insuranceClaimBody = InsuranceClaimBody(2, "some description", Date())
-
-        given(clientInsuranceService.insertNewInsuranceClaim(insuranceClaimBody)).willReturn(claimMock)
-
-        val response = clientController.postInsuranceClaim(insuranceClaimBody)
-
-        assertNotNull(response)
-        assertEquals(HttpStatus.CREATED, response.statusCode)
-
-    }
-
-    @Test
-    fun testGetInsuranceClaimsForClient() {
         val insuranceClaims = listOf(claimMock)
 
         val pagedInsuranceClaims: Page<InsuranceClaim> = PageImpl<InsuranceClaim>(insuranceClaims, PageRequest(0, 10), insuranceClaims.size.toLong())
@@ -142,9 +122,9 @@ class ClientControllerTest {
         requestTO.size = 10
         requestTO.status = listOf(InsuranceStatusQueryType.ACCEPTED)
 
-        given(clientInsuranceService.getInsuranceClaimsForClient(requestTO)).willReturn(pagedInsuranceClaims)
+        given(agentInsuranceService.getInsuranceClaimsForCompany(requestTO)).willReturn(pagedInsuranceClaims)
 
-        val response = clientController.getInsuranceClaimsForClient("jonsnow@gmail.com", 0, 10)
+        val response = agentController.getInsuranceClaims(1, listOf(InsuranceStatusQueryType.ACCEPTED), 1, 10)
 
         assertNotNull(response)
         assertEquals(HttpStatus.OK, response.statusCode)
@@ -152,12 +132,15 @@ class ClientControllerTest {
     }
 
     @Test
-    fun testGetAllCompanyDetails() {
-        given(clientInsuranceService.getAllCompanyDetails()).willReturn(listOf(mockCompany))
+    fun testUpdateInsuranceClaimStatus() {
+        val status = InsuranceStatusType.ACCEPTED
+        given(agentInsuranceService.updateInsuranceClaimStatus(2, status)).willReturn(claimMock)
 
-        val response = clientController.getAllCompanyDetails()
+        val response = agentController.updateInsuranceClaimStatus(2, status)
 
         assertNotNull(response)
-        assertEquals(HttpStatus.OK, response.statusCode)
+        assertEquals(HttpStatus.ACCEPTED, response.statusCode)
     }
+
+
 }
