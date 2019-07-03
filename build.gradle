@@ -24,7 +24,7 @@ project.ext {
 	lombokVersion = '1.16.10'
 	jacocoVersion = '0.8.2'
 	jwtVersion = '2.3.0'
-	sonarExcludeFile = ['src/main/kotlin/com/inno/soramitsu/insurance/RESTserver/RestServerApplication.kt']
+	sonarExcludeFile = ['src/main/kotlin/com/inno/soramitsu/insurance/RESTserver/RestServerApplication.kt', 'src/main/kotlin/com/inno/soramitsu/insurance/RESTserver/swagger']
 }
 
 apply plugin: 'idea'
@@ -112,6 +112,12 @@ tasks.jacocoTestReport {
 		csv.enabled = false
 		html.destination = file("${buildDir}/jacocoHtml")
 		xml.destination = file("${buildDir}/reports/jacocoTestReport.xml")
+	}
+
+	afterEvaluate {
+		classDirectories = files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: ['**/*swagger**', '**/*security**'])
+		})
 	}
 }
 

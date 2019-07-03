@@ -73,8 +73,8 @@ class ServerExceptionHandler: ResponseEntityExceptionHandler() {
     }
 
 
-    override fun handleMissingServletRequestParameter(ex: MissingServletRequestParameterException, headers: HttpHeaders,
-                                                      status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
+    public override fun handleMissingServletRequestParameter(ex: MissingServletRequestParameterException, headers: HttpHeaders,
+                                                             status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
 
         LOG.error(ex.message, ex)
 
@@ -93,7 +93,7 @@ class ServerExceptionHandler: ResponseEntityExceptionHandler() {
     }
 
 
-    override fun handleTypeMismatch(ex: TypeMismatchException, headers: HttpHeaders,
+    public override fun handleTypeMismatch(ex: TypeMismatchException, headers: HttpHeaders,
                                     status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
 
         LOG.error(ex.message, ex)
@@ -113,7 +113,7 @@ class ServerExceptionHandler: ResponseEntityExceptionHandler() {
     }
 
 
-    override fun handleNoHandlerFoundException(
+    public override fun handleNoHandlerFoundException(
             ex: NoHandlerFoundException, headers: HttpHeaders, status: HttpStatus, request: WebRequest): ResponseEntity<Any> {
 
         LOG.error(ex.message, ex)
