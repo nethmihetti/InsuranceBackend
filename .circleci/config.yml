@@ -39,10 +39,10 @@ jobs:
     docker:
       - image: google/cloud-sdk
     environment:
-      - PROJECT_NAME: "CentralizedBackend"
-      - GOOGLE_PROJECT_ID: "centralizedbackend"
+      - PROJECT_NAME: "Soramitsu-insurance"
+      - GOOGLE_PROJECT_ID: "soramitsu-insurance"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
-      - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
+      - GOOGLE_CLUSTER_NAME: "centralized server"
     steps:
       - checkout
       - run:
@@ -75,10 +75,10 @@ jobs:
     docker:
       - image: google/cloud-sdk
     environment:
-      - PROJECT_NAME: "CentralizedBackend"
-      - GOOGLE_PROJECT_ID: "centralizedbackend"
+      - PROJECT_NAME: "Soramitsu-insurance"
+      - GOOGLE_PROJECT_ID: "soramitsu-insurance"
       - GOOGLE_COMPUTE_ZONE: "us-central1-b"
-      - GOOGLE_CLUSTER_NAME: "aggregator-backend-nonprod"
+      - GOOGLE_CLUSTER_NAME: "centralized server"
     steps:
       - checkout
       - run:
