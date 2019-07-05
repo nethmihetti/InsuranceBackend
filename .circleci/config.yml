@@ -42,7 +42,7 @@ jobs:
       - PROJECT_NAME: "Soramitsu-insurance"
       - GOOGLE_PROJECT_ID: "soramitsu-insurance"
       - GOOGLE_COMPUTE_ZONE: "us-central1-a"
-      - GOOGLE_CLUSTER_NAME: "centralized server"
+      - GOOGLE_CLUSTER_NAME: "centralized-server-non-prod"
     steps:
       - checkout
       - run:
@@ -77,8 +77,8 @@ jobs:
     environment:
       - PROJECT_NAME: "Soramitsu-insurance"
       - GOOGLE_PROJECT_ID: "soramitsu-insurance"
-      - GOOGLE_COMPUTE_ZONE: "us-central1-b"
-      - GOOGLE_CLUSTER_NAME: "centralized server"
+      - GOOGLE_COMPUTE_ZONE: "us-central1-a"
+      - GOOGLE_CLUSTER_NAME: "centralized-server-non-prod"
     steps:
       - checkout
       - run:
