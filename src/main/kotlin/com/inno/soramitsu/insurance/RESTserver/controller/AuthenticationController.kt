@@ -43,4 +43,17 @@ class AuthenticationController(private val authenticationService: Authentication
 
         return ResponseEntity(envelopedResponse, HttpStatus.CREATED)
     }
+
+    /*@PostMapping("/login/agent")
+    fun loginInsuranceAgent(@RequestBody agentLoginBody: SignUpRequestBody) : ResponseEntity<EnvelopedResponse<Any>> {
+
+        agentLoginBody.password = bCryptPasswordEncoder.encode(agentLoginBody.password)
+
+        val agent: Agent = authenticationService.postNewClient(agentLoginBody)
+
+        val envelopedResponse: EnvelopedResponse<Any> = ResponseUtil.generateResponse(agent)
+
+        return ResponseEntity(envelopedResponse, HttpStatus.OK)
+
+    }*/
 }

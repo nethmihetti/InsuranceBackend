@@ -12,4 +12,6 @@ interface AuthenticationService {
     fun postNewAgent(agentSignUpRequestBody: SignUpRequestBody, companyId: Int) : Agent
 
     fun postNewClient(clientSignUpRequestBody: SignUpRequestBody) : Client
+
+    fun getAgentDetails(agentUsername: String): Agent
 }

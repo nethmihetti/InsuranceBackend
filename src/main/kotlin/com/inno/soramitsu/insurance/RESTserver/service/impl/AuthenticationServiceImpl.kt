@@ -57,4 +57,10 @@ class AuthenticationServiceImpl(private val agentRepository: AgentRepository,
 
         return clientRepository.save(newClient)
     }
+
+    override fun getAgentDetails(agentUsername: String): Agent {
+
+        return agentRepository.findByInsuranceuserUsername(agentUsername)
+
+    }
 }

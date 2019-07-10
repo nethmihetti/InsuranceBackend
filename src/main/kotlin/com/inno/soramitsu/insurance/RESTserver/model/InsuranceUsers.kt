@@ -1,6 +1,5 @@
 package com.inno.soramitsu.insurance.RESTserver.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 /**
@@ -21,6 +20,8 @@ data class InsuranceUsers (
 
         //@JsonIgnore
         @Column(name = "password")
-        var password: String = ""
+        var password: String = "",
+
+        var userType: String = UserType.INSURANCE_AGENT.type
 
 )

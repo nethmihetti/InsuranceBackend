@@ -42,8 +42,8 @@ enum class InsuranceStatusQueryType(val type: String) {
 }
 
 enum class UserType(val type: String) {
-    INSURANCE_AGENT("insurance_agent"),
-    INSURANCE_CLIENT("insurance_client")
+    INSURANCE_AGENT("agent"),
+    INSURANCE_CLIENT("client")
 }
 
 class InsuranceRequestBody (
@@ -65,7 +65,8 @@ class CompanyRequestBody(
 
 class SignUpRequestBody(
     var username: String,
-    var password: String
+    var password: String,
+    var userType: UserType
 )
 
 class InsuranceClaimBody(

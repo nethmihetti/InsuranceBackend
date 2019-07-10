@@ -12,6 +12,7 @@ class Constants {
         const val HEADER_STRING:String = "Authorization"
         const val SIGN_UP_URL_AGENT:String = "/api/V1/agents/signUp"
         const val SIGN_UP_URL_CLIENT:String = "/api/V1/clients/signUp"
+        const val AGENT_HEADER_STRING: String = "CompanyId"
     }
 }
 
